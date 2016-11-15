@@ -13,6 +13,8 @@ import java.util.Locale;
 import java.util.logging.Logger;
 import java.util.zip.GZIPInputStream;
 
+import neuralNetwork.*;
+
 /**
  * MNIST database utilities.
  * 
@@ -241,59 +243,11 @@ public class MNISTDatabase {
         System.out.println("Training images size " + trainingImages.length);
         System.out.println("Test images size " + testImages.length);
         
-        int[][][] neuron = new int[10][28][28]; 
-        for (int i = 0; i < 10; i++) {
-            for (int j = 0; j < 28; j++) {
-                for (int k = 0; k < 28; k++) {
-                    neuron[i][j][k] = 0;
-                }
-            }
-        }
+        BasicNeuralNetwork neuralNetwork = new BasicNeuralNetwork();
+        neuralNetwork.train(trainingImages, trainingLabels);
+        neuralNetwork.test(testImages);
         
-        for (int i = 0; i < trainingImages.length; i++) {
-            for (int j = 0; j < 28; j++) {
-                for (int k = 0; k < 28; k++) {
-                    if (trainingImages[i][j][k] != 0) {
-                        neuron[trainingLabels[i]][j][k]++;
-                    } else {
-                        neuron[trainingLabels[i]][j][k]--;
-                    }
-                }
-            }
-        }
-        
-        int aciertos = 0;
-        
-        for (int i = 0; i < testImages.length; i++) {
-            int[] votos = new int[10];
-            for (int j = 0; j < 10; j++) {
-                votos[j] = 0;
-            }
-            for (int j = 0; j < 28; j++) {
-                for (int k = 0; k < 28; k++) {
-                    if (testImages[i][j][k] > 0) {
-                        for (int l = 0; l < 10; l++) {
-                            if (neuron[l][j][k] > 0) {
-                                votos[l]++;
-                            }
-                        }
-                    }
-                }
-            }
-            int masVotado = 0;
-            int masVotos = votos[0];
-            for (int j = 1; j < 10; j++) {
-                if (votos[j] > masVotos) {
-                    masVotado = j;
-                    masVotos = votos[j];
-                }
-            }
-            if (masVotado == testLabels[i]) {
-                aciertos++;
-            }
-        }
-        
-        System.out.println("Número de aciertos: " + aciertos);
+        System.out.println("Número de aciertos: " + neuralNetwork.getNumberOfHits(testLabels));
 
         //System.out.println("Raw image data:");
         //System.out.println(toString(trainingImages[0]));
