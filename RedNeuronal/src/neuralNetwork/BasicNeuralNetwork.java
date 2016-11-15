@@ -50,30 +50,30 @@ public class BasicNeuralNetwork {
     public void test(int[][][] images) {
         results = new int[images.length];
         for (int i = 0; i < images.length; i++) {
-            int[] votos = new int[NUMBERS];
+            int[] votes = new int[NUMBERS];
             for (int j = 0; j < NUMBERS; j++) {
-                votos[j] = 0;
+                votes[j] = 0;
             }
             for (int j = 0; j < SIZE; j++) {
                 for (int k = 0; k < SIZE; k++) {
                     if (images[i][j][k] > 0) {
                         for (int l = 0; l < NUMBERS; l++) {
                             if (counter[l][j][k] > 0) {
-                                votos[l]++;
+                                votes[l]++;
                             }
                         }
                     }
                 }
             }
-            int masVotado = 0;
-            int masVotos = votos[0];
+            int result = 0;
+            int resultValue = votes[0];
             for (int j = 1; j < NUMBERS; j++) {
-                if (votos[j] > masVotos) {
-                    masVotado = j;
-                    masVotos = votos[j];
+                if (votes[j] > resultValue) {
+                    result = j;
+                    resultValue = votes[j];
                 }
             }
-            results[i] = masVotado;
+            results[i] = result;
         }
     }
     
