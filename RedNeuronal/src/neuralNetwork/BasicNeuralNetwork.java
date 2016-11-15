@@ -77,14 +77,14 @@ public class BasicNeuralNetwork {
         }
     }
     
-    public int getNumberOfHits(int[] labels) {
-        int hits = 0;
+    public float getErrorRate(int[] labels) {
+        int error = 0;
         for (int i = 0; i < labels.length; i++) {
-            if (labels[i] == results[i]) {
-                hits++;
+            if (labels[i] != results[i]) {
+                error++;
             }
         }
-        return hits;
+        return (float) error / labels.length * 100;
     }
     
 }

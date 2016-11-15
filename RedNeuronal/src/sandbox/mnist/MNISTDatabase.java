@@ -240,14 +240,11 @@ public class MNISTDatabase {
         trainingLabels = readLabels("data/mnist/" + TRAINING_LABELS);
         testLabels = readLabels("data/mnist/" + TEST_LABELS);
         
-        System.out.println("Training images size " + trainingImages.length);
-        System.out.println("Test images size " + testImages.length);
-        
         BasicNeuralNetwork neuralNetwork = new BasicNeuralNetwork();
         neuralNetwork.train(trainingImages, trainingLabels);
         neuralNetwork.test(testImages);
         
-        System.out.println("Número de aciertos: " + neuralNetwork.getNumberOfHits(testLabels));
+        System.out.println("Error rate: " + neuralNetwork.getErrorRate(testLabels) + "%");
 
         //System.out.println("Raw image data:");
         //System.out.println(toString(trainingImages[0]));
