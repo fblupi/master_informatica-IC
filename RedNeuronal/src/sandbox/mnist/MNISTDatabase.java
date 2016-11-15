@@ -66,10 +66,10 @@ public class MNISTDatabase {
 
         LOG.info("Downloading MNIST database...");
 
-        download(MNIST_URL+TRAINING_IMAGES, directory+TRAINING_IMAGES);
-        download(MNIST_URL+TRAINING_LABELS, directory+TRAINING_LABELS);
-        download(MNIST_URL+TEST_IMAGES, directory+TEST_IMAGES);
-        download(MNIST_URL+TEST_LABELS, directory+TEST_LABELS);
+        download(MNIST_URL + TRAINING_IMAGES, directory + TRAINING_IMAGES);
+        download(MNIST_URL + TRAINING_LABELS, directory + TRAINING_LABELS);
+        download(MNIST_URL + TEST_IMAGES, directory + TEST_IMAGES);
+        download(MNIST_URL + TEST_LABELS, directory + TEST_LABELS);
 
         LOG.info("MNIST database downloaded into " + directory);
     }
@@ -230,26 +230,82 @@ public class MNISTDatabase {
     public static void main (String[] args) throws IOException {
         // downloadMNIST("data/mnist/");
 
-        int images[][][];
-        //images = readImages("data/mnist/" + TRAINING_IMAGES);
-        images = readImages("data/mnist/" + TEST_IMAGES);
+        int[][][] trainingImages, testImages;
+        trainingImages = readImages("data/mnist/" + TRAINING_IMAGES);
+        testImages = readImages("data/mnist/" + TEST_IMAGES);
 
-        System.out.println("Raw image data:");
-        System.out.println(toString(images[0]));
+        int[] trainingLabels, testLabels;
+        trainingLabels = readLabels("data/mnist/" + TRAINING_LABELS);
+        testLabels = readLabels("data/mnist/" + TEST_LABELS);
+        
+        System.out.println("Training images size " + trainingImages.length);
+        System.out.println("Test images size " + testImages.length);
+        
+        int[][][] neuron = new int[10][28][28]; 
+        for (int i = 0; i < 10; i++) {
+            for (int j = 0; j < 28; j++) {
+                for (int k = 0; k < 28; k++) {
+                    neuron[i][j][k] = 0;
+                }
+            }
+        }
+        
+        for (int i = 0; i < trainingImages.length; i++) {
+            for (int j = 0; j < 28; j++) {
+                for (int k = 0; k < 28; k++) {
+                    if (trainingImages[i][j][k] != 0) {
+                        neuron[trainingLabels[i]][j][k]++;
+                    } else {
+                        neuron[trainingLabels[i]][j][k]--;
+                    }
+                }
+            }
+        }
+        
+        int aciertos = 0;
+        
+        for (int i = 0; i < testImages.length; i++) {
+            int[] votos = new int[10];
+            for (int j = 0; j < 10; j++) {
+                votos[j] = 0;
+            }
+            for (int j = 0; j < 28; j++) {
+                for (int k = 0; k < 28; k++) {
+                    if (testImages[i][j][k] > 0) {
+                        for (int l = 0; l < 10; l++) {
+                            if (neuron[l][j][k] > 0) {
+                                votos[l]++;
+                            }
+                        }
+                    }
+                }
+            }
+            int masVotado = 0;
+            int masVotos = votos[0];
+            for (int j = 1; j < 10; j++) {
+                if (votos[j] > masVotos) {
+                    masVotado = j;
+                    masVotos = votos[j];
+                }
+            }
+            if (masVotado == testLabels[i]) {
+                aciertos++;
+            }
+        }
+        
+        System.out.println("Número de aciertos: " + aciertos);
+
+        //System.out.println("Raw image data:");
+        //System.out.println(toString(trainingImages[0]));
 
         // Normalize image data
-        float data[][] = normalize(images[0]);
+        //float[][] trainingData = normalize(trainingImages[0]);
 
-        System.out.println("Normalized image:");
-        System.out.println(toString(data));
+        //System.out.println("Normalized image:");
+        //System.out.println(toString(trainingData));
 
-
-        int labels[];
-        // labels = readLabels("data/mnist/" + TRAINING_LABELS);
-        labels = readLabels("data/mnist/" + TEST_LABELS);
-
-        System.out.println("Image label:");
-        System.out.println(labels[0]);
+        //System.out.println("Image label:");
+        //System.out.println(trainingLabels[0]);
     }
 
 }
