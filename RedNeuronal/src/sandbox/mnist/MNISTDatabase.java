@@ -13,7 +13,7 @@ import java.util.Locale;
 import java.util.logging.Logger;
 import java.util.zip.GZIPInputStream;
 
-import neuralNetwork.*;
+import redNeuronal.*;
 
 /**
  * MNIST database utilities.
@@ -231,20 +231,43 @@ public class MNISTDatabase {
 
     public static void main (String[] args) throws IOException {
         // downloadMNIST("data/mnist/");
-
-        int[][][] trainingImages, testImages;
-        trainingImages = readImages("data/mnist/" + TRAINING_IMAGES);
-        testImages = readImages("data/mnist/" + TEST_IMAGES);
-
-        int[] trainingLabels, testLabels;
-        trainingLabels = readLabels("data/mnist/" + TRAINING_LABELS);
-        testLabels = readLabels("data/mnist/" + TEST_LABELS);
         
-        BasicNeuralNetwork neuralNetwork = new BasicNeuralNetwork();
-        neuralNetwork.train(trainingImages, trainingLabels);
-        neuralNetwork.test(testImages);
+        System.out.println("Leyendo imágenes...");
+
+        int[][][] imagenesEntrenamiento, imagenesTest;
+        imagenesEntrenamiento = readImages("data/mnist/" + TRAINING_IMAGES);
+        imagenesTest = readImages("data/mnist/" + TEST_IMAGES);
         
-        System.out.println("Error rate: " + neuralNetwork.getErrorRate(testLabels) + "%");
+        float[][][] imagenesEntrenamientoNormalizadas = new float[imagenesEntrenamiento.length][28][28];
+        float[][][] imagenesTestNormalizadas = new float[imagenesTest.length][28][28];
+        
+        System.out.println("Normalizando...");
+        
+        for (int i = 0; i < imagenesEntrenamiento.length; i++) {
+            imagenesEntrenamientoNormalizadas[i] = normalize(imagenesEntrenamiento[i]);
+        }
+        
+        for (int i = 0; i < imagenesTest.length; i++) {
+            imagenesTestNormalizadas[i] = normalize(imagenesTest[i]);
+        }
+        
+        System.out.println("Leyendo resultados...");
+
+        int[] resultadosEntrenamiento, resultadosTest;
+        resultadosEntrenamiento = readLabels("data/mnist/" + TRAINING_LABELS);
+        resultadosTest = readLabels("data/mnist/" + TEST_LABELS);
+        
+        System.out.println("Creando red neuronal...");
+        
+        RedNeuronal redNeuronal = new RedNeuronal();
+        
+        System.out.println("Entrenando...");
+        
+        redNeuronal.entrenarImagenes(imagenesEntrenamientoNormalizadas, resultadosEntrenamiento);
+        
+        System.out.println("Testeando...");
+        
+        System.out.println("Error rate: " + redNeuronal.testImagenes(imagenesTestNormalizadas, resultadosTest) + "%");
 
         //System.out.println("Raw image data:");
         //System.out.println(toString(trainingImages[0]));
