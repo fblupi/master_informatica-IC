@@ -22,7 +22,7 @@ public class Neurona {
         listaSinapsis = new ArrayList<>();
         pesos = new ArrayList<>();
         Random random = new Random();
-        umbral = random.nextDouble();
+        umbral = random.nextDouble() * 3.46 - 1.73;
     }
     
     private double sigmoide(double x) {
@@ -39,8 +39,6 @@ public class Neurona {
         sumatoria -= umbral;
         
         valor = sigmoide(sumatoria);
-        
-        //System.out.println(valor);
     }
     
     public void addSinapsis(Neurona neurona, double peso) {
