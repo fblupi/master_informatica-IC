@@ -201,23 +201,6 @@ public class NeuralNetwork {
         initializeBiasArrays();
         initializeOutputErrorArrays();
         initializeErrorSigntalArrays();
-        
-        //printArraysSize();
-    }
-    
-    private void printArraysSize() {
-        System.out.println("OUTPUT length: " + outputs.length);
-        for (int i = 0; i < outputs.length; i++) {
-            System.out.println("\tOUTPUT (" + i + ") length: " + outputs[i].length);
-        }
-        
-        System.out.println("WEIGHT length: " + weights.length);
-        for (int i = 0; i < weights.length; i++) {
-            System.out.println("\tWEIGHT (" + i + ") length: " + weights[i].length);
-            for (int j = 0; j < weights[i].length; j++) {
-                System.out.println("\t\tWEIGHT (" + i + "," + j + ") length: " + weights[i][j].length);
-            }
-        }
     }
     
     private double sigmoid(double x) {
