@@ -13,7 +13,7 @@ import java.util.Locale;
 import java.util.logging.Logger;
 import java.util.zip.GZIPInputStream;
 
-import redNeuronal.*;
+import fblupi.neuralnetwork.*;
 
 /**
  * MNIST database utilities.
@@ -259,15 +259,15 @@ public class MNISTDatabase {
         
         System.out.println("Creando red neuronal...");
         
-        RedNeuronal redNeuronal = new RedNeuronal();
+        NeuralNetwork redNeuronal = new NeuralNetwork(3);
         
         System.out.println("Entrenando...");
         
-        redNeuronal.entrenarImagenes(imagenesEntrenamientoNormalizadas, resultadosEntrenamiento);
+        redNeuronal.train(imagenesEntrenamientoNormalizadas, resultadosEntrenamiento);
         
         System.out.println("Testeando...");
         
-        System.out.println("Error rate: " + redNeuronal.testImagenes(imagenesTestNormalizadas, resultadosTest) + "%");
+        System.out.println("Error rate: " + redNeuronal.test(imagenesTestNormalizadas, resultadosTest) + "%");
 
         //System.out.println("Raw image data:");
         //System.out.println(toString(trainingImages[0]));
