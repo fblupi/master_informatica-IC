@@ -259,7 +259,7 @@ public class MNISTDatabase {
         
         System.out.println("Creando red neuronal...");
         
-        NeuralNetwork redNeuronal = new NeuralNetwork(3);
+        NeuralNetwork redNeuronal = new NeuralNetwork();
         
         System.out.println("Entrenando...");
         

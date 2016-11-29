@@ -1,53 +1,93 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package fblupi.neuralnetwork;
 
 import java.util.Random;
 
 /**
- *
- * @author fboli
+ * 
+ * @author fblupi
  */
 public class NeuralNetwork {
     private final int IMAGE_SIZE = 28;
-    private final int INPUT_SIZE = IMAGE_SIZE * IMAGE_SIZE;
-    private final int HIDDEN_LAYER_SIZE = INPUT_SIZE;
-    private final int POSSIBLE_OUTPUTS = 10;
-    private final double RANDOM_MIN = -1.7165;
-    private final double RANDOM_MAX =  1.7165;
+    
+    private final int INPUT_LAYER_SIZE = IMAGE_SIZE * IMAGE_SIZE;
+    private final int HIDDEN_LAYER_SIZE = 256;
+    private final int OUTPUT_LAYER_SIZE = 10;
+    private final int OUTPUT_ARRAY_SIZE = 3;
+    private final int WEIGHT_ARRAY_SIZE = 2;
+    private final int BIAS_ARRAY_SIZE = 3;
+    private final int INPUT_LAYER_INDEX = 0;
+    private final int HIDDEN_LAYER_INDEX = 1;
+    private final int OUTPUT_LAYER_INDEX = 2;
+    private final int HIDDEN_WEIGHT_INDEX = 0;
+    private final int OUTPUT_WEIGHT_INDEX = 1;
+    
+    private final double RANDOM_MIN = -.1;
+    private final double RANDOM_MAX =  .1;
     private final double RANDOM_INTERVAL = RANDOM_MAX - RANDOM_MIN;
-    private final double LEARNING_RATE = 0.7;
-    private final int OUTPUT_LAYER_INDEX;
+    
+    private final double LEARNING_RATE = .1;
     
     private double[][] outputs;
     private double[][][] weights;
+    private double[][] bias;
     
-    public NeuralNetwork(int nLayers) {
-        OUTPUT_LAYER_INDEX = nLayers - 1;
-        initializeArrays(nLayers);
+    private double[] deltaOutput;
+    private double[][] errorSignals;
+    
+    public NeuralNetwork() {
+        initializeArrays();
         initializeWeightValues();
     }
     
     public void train(float[][][] images, int[] results) {
-        for (int i = 0; i < images.length; i++) {
-            System.out.println("Training " + (i + 1) + "/" + images.length);
-            trainSingleImage(images[i], results[i]);
-        }
+        for (int iteration = 0; iteration < 10; iteration++)
+            for (int i = 0; i < images.length; i++) {
+                System.out.println("Iteration: " + iteration + ", Training " + (i + 1) + "/" + images.length);
+                trainSingleImage(images[i], results[i]);
+            }
     }
     
     private void trainSingleImage(float[][] image, int result) {
         addInputFromImage(image);
-        forwardPropagation();
-        for (int i = 0; i < POSSIBLE_OUTPUTS; i++) {
+        feedForwardPropagation();
+        backPropagation(result);
+    }
+    
+    private void backPropagationOutputLayer() {
+        for (int i = 0; i < OUTPUT_LAYER_SIZE; i++) {
+            errorSignals[OUTPUT_WEIGHT_INDEX][i] = deltaOutput[i] * outputs[OUTPUT_LAYER_INDEX][i] * (1 - outputs[OUTPUT_LAYER_INDEX][i]);
+            for (int j = 0; j < HIDDEN_LAYER_SIZE; j++) {
+                weights[OUTPUT_WEIGHT_INDEX][i][j] += LEARNING_RATE * errorSignals[OUTPUT_WEIGHT_INDEX][i] * outputs[HIDDEN_LAYER_INDEX][j];
+            }
+            bias[OUTPUT_WEIGHT_INDEX][i] += LEARNING_RATE * errorSignals[OUTPUT_WEIGHT_INDEX][i];
+        }
+    }
+    
+    private void backPropagationHiddenLayer() {
+        for (int i = 0; i < HIDDEN_LAYER_SIZE; i++) {
+            errorSignals[HIDDEN_WEIGHT_INDEX][i] = 0;
+            for (int j = 0; j < OUTPUT_LAYER_SIZE; j++) {
+                errorSignals[HIDDEN_WEIGHT_INDEX][i] += errorSignals[OUTPUT_WEIGHT_INDEX][j] * weights[OUTPUT_WEIGHT_INDEX][j][i];
+            }
+            for (int j = 0; j < INPUT_LAYER_SIZE; j++) {
+                weights[HIDDEN_WEIGHT_INDEX][i][j] += LEARNING_RATE * errorSignals[HIDDEN_WEIGHT_INDEX][i] * outputs[INPUT_LAYER_INDEX][j];
+            }
+            bias[HIDDEN_WEIGHT_INDEX][i] += LEARNING_RATE * errorSignals[HIDDEN_WEIGHT_INDEX][i];
+        }
+    }
+    
+    private void backPropagation(int result) {
+        calculateDeltaOutput(result);
+        backPropagationOutputLayer();
+        backPropagationHiddenLayer();
+    }
+    
+    private void calculateDeltaOutput(int result) {
+        for (int i = 0; i < OUTPUT_LAYER_SIZE; i++) {
             if (i == result) {
-                double error = 1.0 - outputs[OUTPUT_LAYER_INDEX][i];
-                backPropagation(error);
+                deltaOutput[i] = 1.0 - outputs[OUTPUT_LAYER_INDEX][i];
             } else {
-                double error = 0.0 - outputs[OUTPUT_LAYER_INDEX][i];
-                backPropagation(error);
+                deltaOutput[i] = 0.0 - outputs[OUTPUT_LAYER_INDEX][i];
             }
         }
     }
@@ -65,12 +105,12 @@ public class NeuralNetwork {
     
     public boolean testSingleImage(float[][] image, int result) {
         addInputFromImage(image);
-        forwardPropagation();
+        feedForwardPropagation();
         
         int max = 0;
         double maxValue = outputs[OUTPUT_LAYER_INDEX][0];
         
-        for (int i = 1; i < POSSIBLE_OUTPUTS; i++) {
+        for (int i = 1; i < OUTPUT_LAYER_SIZE; i++) {
             if (outputs[OUTPUT_LAYER_INDEX][i] > maxValue) {
                 maxValue = outputs[OUTPUT_LAYER_INDEX][i];
                 max = i;
@@ -82,22 +122,12 @@ public class NeuralNetwork {
         return max == result;
     }
     
-    private void backPropagation(double error) {
-        for (int k = OUTPUT_LAYER_INDEX; k > 0; k--) {
-            for (int i = 0; i < weights[k].length; i++) {
-                for (int j = 0; j < weights[k][i].length; j++) {
-                    weights[k][i][j] += LEARNING_RATE * error * outputs[k - 1][j] * outputs[k][i] * (1 - outputs[k][i]);
-                }
-            }
-        }
-    }
-    
-    private void forwardPropagation() {
-        for (int k = 1; k < outputs.length; k++) {
+    private void feedForwardPropagation() {
+        for (int k = 1; k < OUTPUT_ARRAY_SIZE; k++) {
             for (int i = 0; i < outputs[k].length; i++) {
                 double sum = 0;
                 for (int j = 0; j < outputs[k - 1].length; j++) {
-                    sum += weights[k][i][j] * outputs[k - 1][j];
+                    sum += weights[k - 1][i][j] * outputs[k - 1][j] + bias[k][i];
                 }
                 outputs[k][i] = sigmoid(sum);
             }
@@ -115,7 +145,7 @@ public class NeuralNetwork {
     private void initializeWeightValues() {
         Random random = new Random();
         
-        for (int k = 1; k < weights.length; k++) { // First layer has no weights
+        for (int k = 0; k < WEIGHT_ARRAY_SIZE; k++) { // First layer has no weights
             for (int i = 0; i < weights[k].length; i++) {
                 for (int j = 0; j < weights[k][i].length; j++) {
                     weights[k][i][j] = random.nextDouble() * RANDOM_INTERVAL + RANDOM_MIN;
@@ -124,42 +154,53 @@ public class NeuralNetwork {
         }
     }
     
-    private void initializeOutputArrays(int nLayers) {
-        outputs = new double[nLayers][];
+    private void initializeOutputArrays() {
+        outputs = new double[OUTPUT_ARRAY_SIZE][]; // outputs for input, hidden and output layers
         
-        outputs[0] = new double[INPUT_SIZE]; // Input layer has input size
-        
-        for (int i = 1; i < OUTPUT_LAYER_INDEX; i++) { // Hidden layers have hidden layer size
-            outputs[i] = new double[HIDDEN_LAYER_SIZE];
-        }
-        
-        outputs[OUTPUT_LAYER_INDEX] = new double[POSSIBLE_OUTPUTS]; // Output layer has an specific number of possible outputs
+        outputs[INPUT_LAYER_INDEX] = new double[INPUT_LAYER_SIZE]; // input layer has input size
+        outputs[HIDDEN_LAYER_INDEX] = new double[HIDDEN_LAYER_SIZE]; // hidden layer has hidden layer size
+        outputs[OUTPUT_LAYER_INDEX] = new double[OUTPUT_LAYER_SIZE]; // Output layer has 10 possible outputs
     }
     
-    private void initializeWeightArrays(int nLayers) {
-        weights = new double[nLayers][][];
+    private void initializeWeightArrays() {
+        weights = new double[WEIGHT_ARRAY_SIZE][][]; // weights for hidden and output layers
         
-        weights[0] = null; // Input layer has no weights
-        weights[1] = new double[HIDDEN_LAYER_SIZE][];
-        for (int i = 0; i < weights[1].length; i++) {
-            weights[1][i] = new double[INPUT_SIZE]; // First hidden layer has as weights as input size
+        weights[HIDDEN_WEIGHT_INDEX] = new double[HIDDEN_LAYER_SIZE][];
+        for (int i = 0; i < HIDDEN_LAYER_SIZE; i++) {
+            weights[HIDDEN_WEIGHT_INDEX][i] = new double[INPUT_LAYER_SIZE]; // hidden layer has as weights as input size
         }
         
-        for (int i = 1; i < nLayers; i++) {
-            if (i == OUTPUT_LAYER_INDEX) { // Output layer could have a different size than hidden layers
-                weights[i] = new double[POSSIBLE_OUTPUTS][]; 
-            } else {
-                weights[i] = new double[HIDDEN_LAYER_SIZE][];
-            }
-            for (int j = 0; j < weights[i].length; j++) {
-                weights[i][j] = new double[HIDDEN_LAYER_SIZE];
-            }
+        weights[OUTPUT_WEIGHT_INDEX] = new double[OUTPUT_LAYER_SIZE][];
+        for (int i = 0; i < OUTPUT_LAYER_SIZE; i++) {
+            weights[OUTPUT_WEIGHT_INDEX][i] = new double[HIDDEN_LAYER_SIZE]; // output layer has as weights as hidden size
         }
     }
     
-    private void initializeArrays(int nLayers) {
-        initializeOutputArrays(nLayers);
-        initializeWeightArrays(nLayers);
+    private void initializeBiasArrays() {
+        bias = new double[BIAS_ARRAY_SIZE][];
+        
+        bias[INPUT_LAYER_INDEX] = new double[INPUT_LAYER_SIZE]; // input layer has input size
+        bias[HIDDEN_LAYER_INDEX] = new double[HIDDEN_LAYER_SIZE]; // hidden layer has hidden layer size
+        bias[OUTPUT_LAYER_INDEX] = new double[OUTPUT_LAYER_SIZE]; // Output layer has 10 possible outputs
+    }
+    
+    private void initializeOutputErrorArrays() {
+        deltaOutput = new double[OUTPUT_LAYER_SIZE];
+    }
+    
+    private void initializeErrorSigntalArrays() {
+        errorSignals = new double[WEIGHT_ARRAY_SIZE][];
+        
+        errorSignals[HIDDEN_WEIGHT_INDEX] = new double[HIDDEN_LAYER_SIZE];
+        errorSignals[OUTPUT_WEIGHT_INDEX] = new double[HIDDEN_LAYER_SIZE];
+    }
+    
+    private void initializeArrays() {
+        initializeOutputArrays();
+        initializeWeightArrays();
+        initializeBiasArrays();
+        initializeOutputErrorArrays();
+        initializeErrorSigntalArrays();
         
         //printArraysSize();
     }
@@ -172,11 +213,9 @@ public class NeuralNetwork {
         
         System.out.println("WEIGHT length: " + weights.length);
         for (int i = 0; i < weights.length; i++) {
-            if (weights[i] != null) {
-                System.out.println("\tWEIGHT (" + i + ") length: " + weights[i].length);
-                for (int j = 0; j < weights[i].length; j++) {
-                    System.out.println("\t\tWEIGHT (" + i + "," + j + ") length: " + weights[i][j].length);
-                }
+            System.out.println("\tWEIGHT (" + i + ") length: " + weights[i].length);
+            for (int j = 0; j < weights[i].length; j++) {
+                System.out.println("\t\tWEIGHT (" + i + "," + j + ") length: " + weights[i][j].length);
             }
         }
     }
