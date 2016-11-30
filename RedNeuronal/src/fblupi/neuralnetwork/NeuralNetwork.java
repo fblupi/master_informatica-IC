@@ -27,7 +27,7 @@ public class NeuralNetwork {
     private final double RANDOM_MAX =  .1;
     private final double RANDOM_INTERVAL = RANDOM_MAX - RANDOM_MIN;
     
-    private final double LEARNING_RATE = .0017;
+    private final double LEARNING_RATE = .017;
     
     private double[][] output;
     private double[][][] weight;
@@ -101,10 +101,11 @@ public class NeuralNetwork {
     
     private void backPropagationHiddenLayer() {
         for (int i = 0; i < HIDDEN_LAYER_SIZE; i++) {
-            delta[HIDDEN_WEIGHT_INDEX][i] = 0;
+            double sum = 0;
             for (int j = 0; j < OUTPUT_LAYER_SIZE; j++) {
-                delta[HIDDEN_WEIGHT_INDEX][i] += delta[OUTPUT_WEIGHT_INDEX][j] * weight[OUTPUT_WEIGHT_INDEX][j][i];
+                sum += delta[OUTPUT_WEIGHT_INDEX][j] * weight[OUTPUT_WEIGHT_INDEX][j][i];
             }
+            delta[HIDDEN_WEIGHT_INDEX][i] = output[HIDDEN_LAYER_INDEX][i] * (1 - output[HIDDEN_LAYER_INDEX][i]) * sum;
             for (int j = 0; j < INPUT_LAYER_SIZE; j++) {
                 deltaWeight[HIDDEN_WEIGHT_INDEX][i][j] = LEARNING_RATE * delta[HIDDEN_WEIGHT_INDEX][i] * output[INPUT_LAYER_INDEX][j];
                 weight[HIDDEN_WEIGHT_INDEX][i][j] += deltaWeight[HIDDEN_WEIGHT_INDEX][i][j];

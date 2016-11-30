@@ -268,7 +268,7 @@ public class MNISTDatabase {
 
             System.out.println("Training...");
 
-            nn.train(trainingImagesNormalized, trainingLabels, 20);
+            nn.train(trainingImagesNormalized, trainingLabels, 10);
 
             System.out.println("Testing...");
 

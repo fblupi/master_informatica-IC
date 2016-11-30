@@ -8,6 +8,9 @@ package fblupi.neuralnetwork;
 import java.io.FileWriter;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import jdk.jfr.events.FileWriteEvent;
+import org.json.simple.JSONArray;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -19,37 +22,37 @@ import org.json.simple.parser.ParseException;
  */
 public class JSON {
     public static void writeWeightFile(String filename, double[][][] weight) throws IOException {
-        JSONObject obj = new JSONObject();
+        ArrayList<ArrayList<ArrayList<Double>>> result = new ArrayList<>();
         
         for (int k = 0; k < weight.length; k++) {
-            JSONObject layer = new JSONObject();
+            ArrayList<ArrayList<Double>> layer = new ArrayList<>();
             for (int i = 0; i < weight[k].length; i++) {
-                JSONObject neuron = new JSONObject();
+                ArrayList<Double> neuron = new ArrayList<>();
                 for (int j = 0; j < weight[k][i].length; j++) {
-                    neuron.put(j, weight[k][i][j]);
+                    neuron.add(weight[k][i][j]);
                 }
-                layer.put(i, neuron);
+                layer.add(neuron);
             }
-            obj.put(k, layer);
+            result.add(layer);
         }
         
         FileWriter file = new FileWriter(filename);
-        file.write(obj.toJSONString());
+        JSONArray.writeJSONString(result, file);
     }
     
     public static void writeBiasWeightFile(String filename, double[][] bias) throws IOException {
-        JSONObject obj = new JSONObject();
+        ArrayList<ArrayList<Double>> result = new ArrayList<>();
         
         for (int k = 0; k < bias.length; k++) {
-            JSONObject layer = new JSONObject();
+            ArrayList<Double> layer = new ArrayList<>();
             for (int i = 0; i < bias[k].length; i++) {
-                layer.put(i, bias[k][i]);
+                layer.add(bias[k][i]);
             }
-            obj.put(k, layer);
+            result.add(layer);
         }
         
         FileWriter file = new FileWriter(filename);
-        file.write(obj.toJSONString());
+        JSONArray.writeJSONString(result, file);
     }
     
     public static double[][][] readWeightFile(String filename) throws IOException, ParseException {
