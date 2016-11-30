@@ -10,7 +10,7 @@ public class NeuralNetwork {
     private final int IMAGE_SIZE = 28;
     
     private final int INPUT_LAYER_SIZE = IMAGE_SIZE * IMAGE_SIZE;
-    private final int HIDDEN_LAYER_SIZE = 256;
+    private final int HIDDEN_LAYER_SIZE = 100;
     private final int OUTPUT_LAYER_SIZE = 10;
     
     private final int OUTPUT_ARRAY_SIZE = 3;
@@ -27,7 +27,7 @@ public class NeuralNetwork {
     private final double RANDOM_MAX =  .1;
     private final double RANDOM_INTERVAL = RANDOM_MAX - RANDOM_MIN;
     
-    private final double LEARNING_RATE = .1;
+    private final double LEARNING_RATE = .0017;
     
     private double[][] output;
     private double[][][] weight;
@@ -36,6 +36,8 @@ public class NeuralNetwork {
     private double[] deltaOutput;
     private double[][] delta;
     private double[][][] deltaWeight;
+    
+    private String results;
     
     public NeuralNetwork() {
         initializeArrays();
@@ -58,6 +60,7 @@ public class NeuralNetwork {
     }
     
     public float test(float[][][] images, int[] results) {
+        this.results = "";
         int error = 0;
         for (int i = 0; i < images.length; i++) {
             if (!testSingleImage(images[i], results[i])) {
@@ -80,6 +83,7 @@ public class NeuralNetwork {
                 max = i;
             }
         }
+        this.results += max;
         
         return max == result;
     }
@@ -239,6 +243,10 @@ public class NeuralNetwork {
         return (1.0 / (1.0 + Math.exp(-x)));
     }
     
+    public String getResults() {
+        return results;
+    }
+    
     public double[][][] getWeight() {
         return weight;
     }
@@ -258,9 +266,9 @@ public class NeuralNetwork {
     }
     
     public void setBias(double[][] bias) {
-        for (int i = 0; i < this.bias.length; i++) {
-            for (int j = 0; j < this.bias[i].length; j++) {
-                this.bias[i][j] = bias[i][j];
+        for (int k = 0; k < this.bias.length; k++) {
+            for (int i = 0; i < this.bias[k].length; i++) {
+                this.bias[k][i] = bias[k][i];
             }
         }
     }

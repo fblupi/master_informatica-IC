@@ -14,6 +14,7 @@ import java.util.logging.Logger;
 import java.util.zip.GZIPInputStream;
 
 import fblupi.neuralnetwork.*;
+import java.io.FileWriter;
 import org.json.simple.parser.ParseException;
 
 /**
@@ -267,14 +268,18 @@ public class MNISTDatabase {
 
             System.out.println("Training...");
 
-            nn.train(trainingImagesNormalized, trainingLabels, 1);
+            nn.train(trainingImagesNormalized, trainingLabels, 20);
 
             System.out.println("Testing...");
 
-            System.out.println("ERROR RATE: " + nn.test(testImagesNormalized, testLabels) + "%");
+            float errorRate = nn.test(testImagesNormalized, testLabels);
+            System.out.println("ERROR RATE: " + errorRate + "%");
             
-            JSON.writeWeightFile("data/results/weights.json", nn.getWeight());
-            JSON.writeBiasWeightFile("data/results/bias.json", nn.getBias());
+            FileWriter file = new FileWriter("data/results/test-" + errorRate + ".txt");
+            file.write(nn.getResults());
+            
+            JSON.writeWeightFile("data/results/weights-" + errorRate + ".json", nn.getWeight());
+            JSON.writeBiasWeightFile("data/results/bias-" + errorRate + ".json", nn.getBias());
             
             System.out.println("Writing result...");
             
