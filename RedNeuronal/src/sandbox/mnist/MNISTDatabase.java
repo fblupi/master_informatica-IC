@@ -14,6 +14,7 @@ import java.util.logging.Logger;
 import java.util.zip.GZIPInputStream;
 
 import fblupi.neuralnetwork.*;
+import org.json.simple.parser.ParseException;
 
 /**
  * MNIST database utilities.
@@ -229,57 +230,90 @@ public class MNISTDatabase {
 
     // Test program
 
-    public static void main (String[] args) throws IOException {
+    public static void main (String[] args) throws IOException, ParseException {
         // downloadMNIST("data/mnist/");
+        boolean entrenar = true;
         
-        System.out.println("Leyendo imágenes...");
+        if (entrenar) {
+            
+            System.out.println("Reading images...");
 
-        int[][][] imagenesEntrenamiento, imagenesTest;
-        imagenesEntrenamiento = readImages("data/mnist/" + TRAINING_IMAGES);
-        imagenesTest = readImages("data/mnist/" + TEST_IMAGES);
-        
-        float[][][] imagenesEntrenamientoNormalizadas = new float[imagenesEntrenamiento.length][28][28];
-        float[][][] imagenesTestNormalizadas = new float[imagenesTest.length][28][28];
-        
-        System.out.println("Normalizando...");
-        
-        for (int i = 0; i < imagenesEntrenamiento.length; i++) {
-            imagenesEntrenamientoNormalizadas[i] = normalize(imagenesEntrenamiento[i]);
+            int[][][] trainingImages, testImages;
+            trainingImages = readImages("data/mnist/" + TRAINING_IMAGES);
+            testImages = readImages("data/mnist/" + TEST_IMAGES);
+
+            float[][][] trainingImagesNormalized = new float[trainingImages.length][28][28];
+            float[][][] testImagesNormalized = new float[testImages.length][28][28];
+
+            System.out.println("Normalizing...");
+
+            for (int i = 0; i < trainingImages.length; i++) {
+                trainingImagesNormalized[i] = normalize(trainingImages[i]);
+            }
+
+            for (int i = 0; i < testImages.length; i++) {
+                testImagesNormalized[i] = normalize(testImages[i]);
+            }
+
+            System.out.println("Reading labels...");
+
+            int[] trainingLabels, testLabels;
+            trainingLabels = readLabels("data/mnist/" + TRAINING_LABELS);
+            testLabels = readLabels("data/mnist/" + TEST_LABELS);
+
+            System.out.println("Creating neural network...");
+
+            NeuralNetwork nn = new NeuralNetwork();
+
+            System.out.println("Training...");
+
+            nn.train(trainingImagesNormalized, trainingLabels, 1);
+
+            System.out.println("Testing...");
+
+            System.out.println("ERROR RATE: " + nn.test(testImagesNormalized, testLabels) + "%");
+            
+            JSON.writeWeightFile("data/results/weights.json", nn.getWeight());
+            JSON.writeBiasWeightFile("data/results/bias.json", nn.getBias());
+            
+            System.out.println("Writing result...");
+            
+        } else {
+            
+            System.out.println("Reading images...");
+
+            int[][][] testImages = readImages("data/mnist/" + TEST_IMAGES);
+            
+            float[][][] testImagesNormalized = new float[testImages.length][28][28];
+
+            System.out.println("Normalizing...");
+
+            for (int i = 0; i < testImages.length; i++) {
+                testImagesNormalized[i] = normalize(testImages[i]);
+            }
+
+            System.out.println("Reading results...");
+
+            int[] testLabels = readLabels("data/mnist/" + TEST_LABELS);
+
+            System.out.println("Creating neural network...");
+
+            NeuralNetwork nn = new NeuralNetwork();
+            
+            System.out.println("Reading weights...");
+            
+            double[][][] weight = JSON.readWeightFile("data/results/weight.json");
+            double[][] bias = JSON.readBiasWeightFile("data/results/bias.json");
+            
+            nn.setWeight(weight);
+            nn.setBias(bias);
+
+            System.out.println("Testing...");
+
+            System.out.println("Error rate: " + nn.test(testImagesNormalized, testLabels) + "%");
+            
         }
         
-        for (int i = 0; i < imagenesTest.length; i++) {
-            imagenesTestNormalizadas[i] = normalize(imagenesTest[i]);
-        }
-        
-        System.out.println("Leyendo resultados...");
-
-        int[] resultadosEntrenamiento, resultadosTest;
-        resultadosEntrenamiento = readLabels("data/mnist/" + TRAINING_LABELS);
-        resultadosTest = readLabels("data/mnist/" + TEST_LABELS);
-        
-        System.out.println("Creando red neuronal...");
-        
-        NeuralNetwork redNeuronal = new NeuralNetwork();
-        
-        System.out.println("Entrenando...");
-        
-        redNeuronal.train(imagenesEntrenamientoNormalizadas, resultadosEntrenamiento);
-        
-        System.out.println("Testeando...");
-        
-        System.out.println("Error rate: " + redNeuronal.test(imagenesTestNormalizadas, resultadosTest) + "%");
-
-        //System.out.println("Raw image data:");
-        //System.out.println(toString(trainingImages[0]));
-
-        // Normalize image data
-        //float[][] trainingData = normalize(trainingImages[0]);
-
-        //System.out.println("Normalized image:");
-        //System.out.println(toString(trainingData));
-
-        //System.out.println("Image label:");
-        //System.out.println(trainingLabels[0]);
     }
 
 }
