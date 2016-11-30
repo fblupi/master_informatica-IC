@@ -27,7 +27,7 @@ public class NeuralNetwork {
     private final double RANDOM_MAX =  .1;
     private final double RANDOM_INTERVAL = RANDOM_MAX - RANDOM_MIN;
     
-    private final double LEARNING_RATE = .017;
+    private final double LEARNING_RATE = .1;
     
     private double[][] output;
     private double[][][] weight;

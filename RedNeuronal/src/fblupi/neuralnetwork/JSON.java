@@ -22,62 +22,77 @@ import org.json.simple.parser.ParseException;
  */
 public class JSON {
     public static void writeWeightFile(String filename, double[][][] weight) throws IOException {
-        ArrayList<ArrayList<ArrayList<Double>>> result = new ArrayList<>();
-        
-        for (int k = 0; k < weight.length; k++) {
-            ArrayList<ArrayList<Double>> layer = new ArrayList<>();
-            for (int i = 0; i < weight[k].length; i++) {
-                ArrayList<Double> neuron = new ArrayList<>();
-                for (int j = 0; j < weight[k][i].length; j++) {
-                    neuron.add(weight[k][i][j]);
-                }
-                layer.add(neuron);
-            }
-            result.add(layer);
-        }
-        
         FileWriter file = new FileWriter(filename);
-        JSONArray.writeJSONString(result, file);
+        file.write("\n[");
+        for (int k = 0; k < weight.length; k++) {
+            if (k > 0) {
+                file.write(',');
+            }
+            file.write("\n\t[");
+            for (int i = 0; i < weight[k].length; i++) {
+                if (i > 0) {
+                    file.write(',');
+                }
+                file.write("\n\t\t[\n\t\t\t");
+                for (int j = 0; j < weight[k][i].length; j++) {
+                    if (j > 0) {
+                        file.write(',');
+                    }
+                    file.write(String.valueOf(weight[k][i][j]));
+                }
+                file.write("\n\t\t]");
+                file.flush();
+            }
+            file.write("\n\t]");
+        }
+        file.write("\n]");
+        file.flush();
     }
     
     public static void writeBiasWeightFile(String filename, double[][] bias) throws IOException {
-        ArrayList<ArrayList<Double>> result = new ArrayList<>();
-        
-        for (int k = 0; k < bias.length; k++) {
-            ArrayList<Double> layer = new ArrayList<>();
-            for (int i = 0; i < bias[k].length; i++) {
-                layer.add(bias[k][i]);
-            }
-            result.add(layer);
-        }
-        
         FileWriter file = new FileWriter(filename);
-        JSONArray.writeJSONString(result, file);
+        file.write("\n[");
+        for (int k = 0; k < bias.length; k++) {
+            if (k > 0) {
+                file.write(',');
+            }
+            file.write("\n\t[");
+            for (int i = 0; i < bias[k].length; i++) {
+                if (i > 0) {
+                    file.write(',');
+                }
+                file.write(String.valueOf(bias[k][i]));
+                file.flush();
+            }
+            file.write("\n\t]");
+        }
+        file.write("\n]");
+        file.flush();
     }
     
     public static double[][][] readWeightFile(String filename) throws IOException, ParseException {
         JSONParser parser = new JSONParser();
         double[][][] weight;
         
-        JSONObject obj = (JSONObject) parser.parse(new FileReader(filename));
-        weight = new double[obj.size()][][];
+        JSONArray array = (JSONArray) parser.parse(new FileReader(filename));
+        weight = new double[array.size()][][];
         
-        JSONObject hidden = (JSONObject) obj.get(0);
+        JSONArray hidden = (JSONArray) array.get(0);
         weight[0] = new double[hidden.size()][];
         
         for (int i = 0; i < hidden.size(); i++) {
-            JSONObject neuron = (JSONObject) hidden.get(i);
+            JSONArray neuron = (JSONArray) hidden.get(i);
             weight[0][i] = new double[neuron.size()];
             for (int j = 0; j < neuron.size(); j++) {
                 weight[0][i][j] = (double) neuron.get(j);
             }
         }
         
-        JSONObject output = (JSONObject) obj.get(1);
+        JSONArray output = (JSONArray) array.get(1);
         weight[1] = new double[output.size()][];
         
         for (int i = 0; i < output.size(); i++) {
-            JSONObject neuron = (JSONObject) output.get(i);
+            JSONArray neuron = (JSONArray) output.get(i);
             weight[1][i] = new double[neuron.size()];
             for (int j = 0; j < neuron.size(); j++) {
                 weight[1][i][j] = (double) neuron.get(j);
@@ -91,23 +106,22 @@ public class JSON {
         JSONParser parser = new JSONParser();
         double[][] bias;
         
-        JSONObject obj = (JSONObject) parser.parse(new FileReader(filename));
-        bias = new double[obj.size()][];
+        JSONArray array = (JSONArray) parser.parse(new FileReader(filename));
         
-        JSONObject hidden = (JSONObject) obj.get(0);
+        bias = new double[array.size()][];
+        
+        JSONArray hidden = (JSONArray) array.get(0);
         bias[0] = new double[hidden.size()];
         
         for (int i = 0; i < hidden.size(); i++) {
-            JSONObject neuron = (JSONObject) hidden.get(i);
-            bias[0][i] = (double) neuron.get(i);
+            bias[0][i] = (double) hidden.get(i);
         }
         
-        JSONObject output = (JSONObject) obj.get(1);
+        JSONArray output = (JSONArray) array.get(1);
         bias[1] = new double[output.size()];
         
         for (int i = 0; i < output.size(); i++) {
-            JSONObject neuron = (JSONObject) output.get(i);
-            bias[1][i] = (double) neuron.get(i);
+            bias[1][i] = (double) output.get(i);
         }
         
         return bias;

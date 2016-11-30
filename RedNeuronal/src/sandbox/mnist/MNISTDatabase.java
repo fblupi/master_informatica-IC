@@ -233,7 +233,7 @@ public class MNISTDatabase {
 
     public static void main (String[] args) throws IOException, ParseException {
         // downloadMNIST("data/mnist/");
-        boolean entrenar = true;
+        boolean entrenar = false;
         
         if (entrenar) {
             
@@ -307,8 +307,8 @@ public class MNISTDatabase {
             
             System.out.println("Reading weights...");
             
-            double[][][] weight = JSON.readWeightFile("data/results/weight.json");
-            double[][] bias = JSON.readBiasWeightFile("data/results/bias.json");
+            double[][][] weight = JSON.readWeightFile("data/results/weights-2.72.json");
+            double[][] bias = JSON.readBiasWeightFile("data/results/bias-2.72.json");
             
             nn.setWeight(weight);
             nn.setBias(bias);
