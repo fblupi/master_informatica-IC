@@ -27,7 +27,8 @@ public class NeuralNetwork {
     private final double RANDOM_MAX =  .1;
     private final double RANDOM_INTERVAL = RANDOM_MAX - RANDOM_MIN;
     
-    private final double LEARNING_RATE = .1;
+    private final double LEARNING_RATE = .017;
+    private final double MOMENTUM = .75;
     
     private double[][] output;
     private double[][][] weight;
@@ -35,13 +36,14 @@ public class NeuralNetwork {
     
     private double[] deltaOutput;
     private double[][] delta;
+    private double[][] deltaBias;
     private double[][][] deltaWeight;
     
     private String results;
     
     public NeuralNetwork() {
         initializeArrays();
-        initializeRandomValues();
+        initializeArraysValues();
     }
     
     public void train(float[][][] images, int[] results, int iterations) {
@@ -92,10 +94,11 @@ public class NeuralNetwork {
         for (int i = 0; i < OUTPUT_LAYER_SIZE; i++) {
             delta[OUTPUT_WEIGHT_INDEX][i] = deltaOutput[i] * output[OUTPUT_LAYER_INDEX][i] * (1 - output[OUTPUT_LAYER_INDEX][i]);
             for (int j = 0; j < HIDDEN_LAYER_SIZE; j++) {
-                deltaWeight[OUTPUT_WEIGHT_INDEX][i][j] = LEARNING_RATE * delta[OUTPUT_WEIGHT_INDEX][i] * output[HIDDEN_LAYER_INDEX][j];
+                deltaWeight[OUTPUT_WEIGHT_INDEX][i][j] = (LEARNING_RATE * delta[OUTPUT_WEIGHT_INDEX][i] * output[HIDDEN_LAYER_INDEX][j]) + (MOMENTUM * deltaWeight[OUTPUT_WEIGHT_INDEX][i][j]);
                 weight[OUTPUT_WEIGHT_INDEX][i][j] += deltaWeight[OUTPUT_WEIGHT_INDEX][i][j];
             }
-            bias[OUTPUT_WEIGHT_INDEX][i] += LEARNING_RATE * delta[OUTPUT_WEIGHT_INDEX][i];
+            deltaBias[OUTPUT_WEIGHT_INDEX][i] = (LEARNING_RATE * delta[OUTPUT_WEIGHT_INDEX][i]) + (MOMENTUM * deltaBias[OUTPUT_WEIGHT_INDEX][i]);
+            bias[OUTPUT_WEIGHT_INDEX][i] += deltaBias[OUTPUT_WEIGHT_INDEX][i];
         }
     }
     
@@ -107,10 +110,11 @@ public class NeuralNetwork {
             }
             delta[HIDDEN_WEIGHT_INDEX][i] = output[HIDDEN_LAYER_INDEX][i] * (1 - output[HIDDEN_LAYER_INDEX][i]) * sum;
             for (int j = 0; j < INPUT_LAYER_SIZE; j++) {
-                deltaWeight[HIDDEN_WEIGHT_INDEX][i][j] = LEARNING_RATE * delta[HIDDEN_WEIGHT_INDEX][i] * output[INPUT_LAYER_INDEX][j];
+                deltaWeight[HIDDEN_WEIGHT_INDEX][i][j] = (LEARNING_RATE * delta[HIDDEN_WEIGHT_INDEX][i] * output[INPUT_LAYER_INDEX][j]) + (MOMENTUM * deltaWeight[HIDDEN_WEIGHT_INDEX][i][j]);
                 weight[HIDDEN_WEIGHT_INDEX][i][j] += deltaWeight[HIDDEN_WEIGHT_INDEX][i][j];
             }
-            bias[HIDDEN_WEIGHT_INDEX][i] += LEARNING_RATE * delta[HIDDEN_WEIGHT_INDEX][i];
+            deltaBias[HIDDEN_WEIGHT_INDEX][i] = (LEARNING_RATE * delta[HIDDEN_WEIGHT_INDEX][i]);
+            bias[HIDDEN_WEIGHT_INDEX][i] += deltaBias[HIDDEN_WEIGHT_INDEX][i] + (MOMENTUM * deltaBias[HIDDEN_WEIGHT_INDEX][i]);
         }
     }
     
@@ -150,6 +154,29 @@ public class NeuralNetwork {
         }
     }
     
+    private void initializeDeltaWeightValues() {
+        for (int k = 0; k < WEIGHT_ARRAY_SIZE; k++) {
+            for (int i = 0; i < deltaWeight[k].length; i++) {
+                for (int j = 0; j < deltaWeight[k][i].length; j++) {
+                    deltaWeight[k][i][j] = .0;
+                }
+            }
+        }
+    }
+    
+    private void initializeDeltaBiasValues() {
+        for (int k = 0; k < WEIGHT_ARRAY_SIZE; k++) {
+            for (int i = 0; i < deltaBias[k].length; i++) {
+                deltaBias[k][i] = .0;
+            }
+        }
+    }
+    
+    private void initilizeDeltaValues() {
+        initializeDeltaWeightValues();
+        initializeDeltaBiasValues();
+    }
+    
     private void initializeWeightValues() {
         Random random = new Random();
         
@@ -161,6 +188,7 @@ public class NeuralNetwork {
             }
         }
     }
+    
     
     private void initializeBiasValues() {
         Random random = new Random();
@@ -175,6 +203,11 @@ public class NeuralNetwork {
     private void initializeRandomValues() {
         initializeWeightValues();
         initializeBiasValues();
+    }
+    
+    private void initializeArraysValues() {
+        initializeRandomValues();
+        initilizeDeltaValues();
     }
     
     private void initializeWeightArrays() {
@@ -231,6 +264,13 @@ public class NeuralNetwork {
         }
     }
     
+    private void initializeDeltaBiasArrays() {
+        deltaBias = new double[WEIGHT_ARRAY_SIZE][];
+        
+        deltaBias[HIDDEN_WEIGHT_INDEX] = new double[HIDDEN_LAYER_SIZE];
+        deltaBias[OUTPUT_WEIGHT_INDEX] = new double[OUTPUT_LAYER_SIZE];
+    }
+    
     private void initializeArrays() {
         initializeOutputArrays();
         initializeWeightArrays();
@@ -238,6 +278,7 @@ public class NeuralNetwork {
         initializeDeltaOutputArrays();
         initializeDeltaArrays();
         initializeDeltaWeightArrays();
+        initializeDeltaBiasArrays();
     }
     
     private double sigmoid(double x) {

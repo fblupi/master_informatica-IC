@@ -235,9 +235,9 @@ public class MNISTDatabase {
     public static void main (String[] args) throws IOException, ParseException {
         // downloadMNIST("data/mnist/");
         boolean train = true;
-        int iterations = 5;
-        boolean recover = true;
-        float recoverError = 2.19f;
+        int iterations = 50;
+        boolean recover = false;
+        float recoverError = 2.16f;
         int[][][] trainingImages, testImages;
         float[][][] trainingImagesNormalized, testImagesNormalized;
         int[] trainingLabels, testLabels;
