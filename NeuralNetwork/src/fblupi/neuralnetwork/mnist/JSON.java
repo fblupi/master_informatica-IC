@@ -8,19 +8,26 @@ package fblupi.neuralnetwork.mnist;
 import java.io.FileWriter;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import jdk.jfr.events.FileWriteEvent;
 import org.json.simple.JSONArray;
 
-import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 /**
+ * Export/import weights arrays to/from JSON
  *
- * @author fboli
+ * @author fblupi
+ * @author Jogua
  */
 public class JSON {
+
+    /**
+     * Export 3D array with weights to JSON file
+     *
+     * @param filename JSON file name
+     * @param weight 3D array with weights
+     * @throws IOException cannot export file
+     */
     public static void writeWeightFile(String filename, double[][][] weight) throws IOException {
         FileWriter file = new FileWriter(filename);
         file.write("\n[");
@@ -48,7 +55,14 @@ public class JSON {
         file.write("\n]");
         file.flush();
     }
-    
+
+    /**
+     * Export 2D array with bias weights to JSON file
+     *
+     * @param filename JSON file name
+     * @param bias 3D array with bias weights
+     * @throws IOException cannot export file
+     */
     public static void writeBiasWeightFile(String filename, double[][] bias) throws IOException {
         FileWriter file = new FileWriter(filename);
         file.write("\n[");
@@ -69,7 +83,15 @@ public class JSON {
         file.write("\n]");
         file.flush();
     }
-    
+
+    /**
+     * Import 3D array with weights from JSON file
+     *
+     * @param filename JSON file name
+     * @return weight 3D array with weights
+     * @throws IOException cannot import file
+     * @throws ParseException cannot parse file content to JSON
+     */
     public static double[][][] readWeightFile(String filename) throws IOException, ParseException {
         JSONParser parser = new JSONParser();
         double[][][] weight;
@@ -101,7 +123,15 @@ public class JSON {
         
         return weight;
     }
-    
+
+    /**
+     * Import 2D array with bias weights from JSON file
+     *
+     * @param filename JSON file name
+     * @return weight 2D array with bias weights
+     * @throws IOException cannot import file
+     * @throws ParseException cannot parse file content to JSON
+     */
     public static double[][] readBiasWeightFile(String filename) throws IOException, ParseException {
         JSONParser parser = new JSONParser();
         double[][] bias;
@@ -126,4 +156,5 @@ public class JSON {
         
         return bias;
     }
+
 }

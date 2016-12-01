@@ -1,7 +1,5 @@
 package sandbox.mnist;
 
-import fblupi.neuralnetwork.mnist.NeuralNetwork;
-import fblupi.neuralnetwork.mnist.JSON;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -14,9 +12,6 @@ import java.nio.channels.ReadableByteChannel;
 import java.util.Locale;
 import java.util.logging.Logger;
 import java.util.zip.GZIPInputStream;
-
-import java.io.FileWriter;
-import org.json.simple.parser.ParseException;
 
 /**
  * MNIST database utilities.
@@ -228,73 +223,5 @@ public class MNISTDatabase {
         }
 
         return builder.toString();
-    }
-
-    // Test program
-
-    public static void main (String[] args) throws IOException, ParseException {
-        // downloadMNIST("data/mnist/");
-        boolean train = true;
-        int iterations = 50;
-        boolean recover = false;
-        float recoverError = 2.16f;
-        int[][][] trainingImages, testImages;
-        float[][][] trainingImagesNormalized, testImagesNormalized;
-        int[] trainingLabels, testLabels;
-        
-        System.out.println("Reading images...");
-
-        trainingImages = readImages("data/mnist/" + TRAINING_IMAGES);
-        testImages = readImages("data/mnist/" + TEST_IMAGES);
-        trainingImagesNormalized = new float[trainingImages.length][28][28];
-        testImagesNormalized = new float[testImages.length][28][28];
-
-        System.out.println("Normalizing...");
-
-        for (int i = 0; i < trainingImages.length; i++) {
-            trainingImagesNormalized[i] = normalize(trainingImages[i]);
-        }
-
-        for (int i = 0; i < testImages.length; i++) {
-            testImagesNormalized[i] = normalize(testImages[i]);
-        }
-
-        System.out.println("Reading labels...");
-
-        trainingLabels = readLabels("data/mnist/" + TRAINING_LABELS);
-        testLabels = readLabels("data/mnist/" + TEST_LABELS);
-
-        System.out.println("Creating neural network...");
-
-        NeuralNetwork nn = new NeuralNetwork();
-        
-        if (recover) {
-            System.out.println("Reading weights...");
-            
-            double[][][] weight = JSON.readWeightFile("data/results/weights-" + recoverError + ".json");
-            double[][] bias = JSON.readBiasWeightFile("data/results/bias-" + recoverError + ".json");
-            
-            nn.setWeight(weight);
-            nn.setBias(bias);
-        }
-
-        if (train) {
-            System.out.println("Training...");
-            
-            nn.train(trainingImagesNormalized, trainingLabels, iterations);
-        }
-
-        System.out.println("Testing...");
-
-        float errorRate = nn.test(testImagesNormalized, testLabels);
-        System.out.println("ERROR RATE: " + errorRate + "%");
-
-        FileWriter file = new FileWriter("data/results/test-" + errorRate + ".txt");
-        file.write(nn.getResults());
-
-        JSON.writeWeightFile("data/results/weights-" + errorRate + ".json", nn.getWeight());
-        JSON.writeBiasWeightFile("data/results/bias-" + errorRate + ".json", nn.getBias());
-
-        System.out.println("Writing result...");
     }
 }
