@@ -50,12 +50,12 @@ public class NeuralNetwork {
     /**
      * Learning rate used during back propagation
      */
-    private final double LEARNING_RATE = .1;
+    private final double LEARNING_RATE = .017;
 
     /**
      * Momentum value used during back propagation
      */
-    private final double MOMENTUM = .75;
+    private final double MOMENTUM = .9;
 
     /**
      * Outputs of each single neuron in each layer
@@ -116,15 +116,39 @@ public class NeuralNetwork {
     }
 
     /**
-     * Training with the images given as many times as specified with iterations value
+     * Training with the images given as many times as specified with epochs value. Each 5
+     * epochs shows the error with the test images
+     *
+     * @param trainingImages 3D array of 2D array of 28x28
+     * @param trainingResults array with the label of each image
+     * @param testImages 3D array of 2D array of 28x28
+     * @param testResults array with the label of each image
+     * @param epochs number of epochs made during the training
+     */
+    public void trainAndTest(float[][][] trainingImages, int[] trainingResults, int epochs, float[][][] testImages,
+                             int[] testResults) {
+        for (int e = 0; e < epochs; e++) {
+            System.out.println("Epoch " + (e + 1) + "/" + epochs + "...");
+            for (int i = 0; i < trainingImages.length; i++) {
+                trainSingleImage(trainingImages[i], trainingResults[i]);
+            }
+            if ((e + 1) % 5 == 0) {
+                System.out.println("Testing...");
+                System.out.println("ERROR RATE: " + test(testImages, testResults) + "%");
+            }
+        }
+    }
+
+    /**
+     * Training with the images given as many times as specified with epochs value
      *
      * @param images 3D array of 2D array of 28x28
      * @param results array with the label of each image
-     * @param iterations number of iterations made during the training
+     * @param epochs number of epochs made during the training
      */
-    public void train(float[][][] images, int[] results, int iterations) {
-        for (int iteration = 0; iteration < iterations; iteration++) {
-            System.out.println("Iteration " + (iteration + 1) + "/" + iterations + "...");
+    public void train(float[][][] images, int[] results, int epochs) {
+        for (int e = 0; e < epochs; e++) {
+            System.out.println("Epoch " + (e + 1) + "/" + epochs + "...");
             for (int i = 0; i < images.length; i++) {
                 trainSingleImage(images[i], results[i]);
             }
@@ -173,10 +197,10 @@ public class NeuralNetwork {
     private boolean testSingleImage(float[][] image, int result) {
         addInputFromImage(image);
         feedForwardPropagation();
-        
+
         int max = 0;
         double maxValue = output[OUTPUT_LAYER_INDEX][0];
-        
+
         for (int i = 1; i < OUTPUT_LAYER_SIZE; i++) {
             if (output[OUTPUT_LAYER_INDEX][i] > maxValue) {
                 maxValue = output[OUTPUT_LAYER_INDEX][i];
@@ -184,7 +208,7 @@ public class NeuralNetwork {
             }
         }
         this.results += max;
-        
+
         return max == result;
     }
 
@@ -405,12 +429,12 @@ public class NeuralNetwork {
      */
     private void initializeWeightArrays() {
         weight = new double[WEIGHT_ARRAY_SIZE][][];
-        
+
         weight[HIDDEN_WEIGHT_INDEX] = new double[HIDDEN_LAYER_SIZE][];
         for (int i = 0; i < HIDDEN_LAYER_SIZE; i++) {
             weight[HIDDEN_WEIGHT_INDEX][i] = new double[INPUT_LAYER_SIZE];
         }
-        
+
         weight[OUTPUT_WEIGHT_INDEX] = new double[OUTPUT_LAYER_SIZE][];
         for (int i = 0; i < OUTPUT_LAYER_SIZE; i++) {
             weight[OUTPUT_WEIGHT_INDEX][i] = new double[HIDDEN_LAYER_SIZE];
@@ -425,7 +449,7 @@ public class NeuralNetwork {
      */
     private void initializeOutputArrays() {
         output = new double[OUTPUT_ARRAY_SIZE][]; // outputs for input, hidden and output layers
-        
+
         output[INPUT_LAYER_INDEX] = new double[INPUT_LAYER_SIZE]; // input layer has input size
         output[HIDDEN_LAYER_INDEX] = new double[HIDDEN_LAYER_SIZE]; // hidden layer has hidden layer size
         output[OUTPUT_LAYER_INDEX] = new double[OUTPUT_LAYER_SIZE]; // Output layer has 10 possible outputs
@@ -438,7 +462,7 @@ public class NeuralNetwork {
      */
     private void initializeBiasArrays() {
         bias = new double[WEIGHT_ARRAY_SIZE][];
-        
+
         bias[HIDDEN_WEIGHT_INDEX] = new double[HIDDEN_LAYER_SIZE];
         bias[OUTPUT_WEIGHT_INDEX] = new double[OUTPUT_LAYER_SIZE];
     }
@@ -457,7 +481,7 @@ public class NeuralNetwork {
      */
     private void initializeDeltaArrays() {
         delta = new double[WEIGHT_ARRAY_SIZE][];
-        
+
         delta[HIDDEN_WEIGHT_INDEX] = new double[HIDDEN_LAYER_SIZE];
         delta[OUTPUT_WEIGHT_INDEX] = new double[OUTPUT_LAYER_SIZE];
     }
@@ -470,12 +494,12 @@ public class NeuralNetwork {
      */
     private void initializeDeltaWeightArrays() {
         deltaWeight = new double[WEIGHT_ARRAY_SIZE][][];
-        
+
         deltaWeight[HIDDEN_WEIGHT_INDEX] = new double[HIDDEN_LAYER_SIZE][];
         for (int i = 0; i < HIDDEN_LAYER_SIZE; i++) {
             deltaWeight[HIDDEN_WEIGHT_INDEX][i] = new double[INPUT_LAYER_SIZE];
         }
-        
+
         deltaWeight[OUTPUT_WEIGHT_INDEX] = new double[OUTPUT_LAYER_SIZE][];
         for (int i = 0; i < OUTPUT_LAYER_SIZE; i++) {
             deltaWeight[OUTPUT_WEIGHT_INDEX][i] = new double[HIDDEN_LAYER_SIZE];
@@ -489,7 +513,7 @@ public class NeuralNetwork {
      */
     private void initializeDeltaBiasArrays() {
         deltaBias = new double[WEIGHT_ARRAY_SIZE][];
-        
+
         deltaBias[HIDDEN_WEIGHT_INDEX] = new double[HIDDEN_LAYER_SIZE];
         deltaBias[OUTPUT_WEIGHT_INDEX] = new double[OUTPUT_LAYER_SIZE];
     }
@@ -543,6 +567,51 @@ public class NeuralNetwork {
         for (int k = 0; k < this.bias.length; k++) {
             System.arraycopy(bias[k], 0, this.bias[k], 0, this.bias[k].length);
         }
+    }
+
+    /**
+     * Get minimum value for randomly initializing weights values
+     *
+     * @return minimum value
+     */
+    public double getRandomMin() {
+        return RANDOM_MIN;
+    }
+
+    /**
+     * Get maximum value for randomly initializing weights values
+     *
+     * @return maximum value
+     */
+    public double getRandomMax() {
+        return RANDOM_MAX;
+    }
+
+    /**
+     * Get learning rate used during training
+     *
+     * @return learning rate
+     */
+    public double getLearningRate() {
+        return LEARNING_RATE;
+    }
+
+    /**
+     * Get momentum used during training
+     *
+     * @return learning rate
+     */
+    public double getMomentum() {
+        return MOMENTUM;
+    }
+
+    /**
+     * Get number of hidden layers used by the neural network
+     *
+     * @return number of hidden layers
+     */
+    public int getHiddenLayerSize() {
+        return HIDDEN_LAYER_SIZE;
     }
 
 }

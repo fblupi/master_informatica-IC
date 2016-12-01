@@ -23,7 +23,7 @@ public class TestingMNIST {
 
     public static void main (String[] args) throws IOException, ParseException {
         boolean train = true;
-        int iterations = 50;
+        int epochs = 50;
         boolean getPreviousWeights = false;
         float previousWeightsError = 1.73f;
         int[][][] trainingImages, testImages;
@@ -72,7 +72,7 @@ public class TestingMNIST {
         if (train) {
             System.out.println("Training...");
 
-            nn.train(trainingImagesNormalized, trainingLabels, iterations);
+            nn.trainAndTest(trainingImagesNormalized, trainingLabels, epochs, testImagesNormalized, testLabels);
         }
 
         System.out.println("Testing...");
@@ -81,7 +81,15 @@ public class TestingMNIST {
         System.out.println("ERROR RATE: " + errorRate + "%");
 
         FileWriter file = new FileWriter("data/results/test-" + errorRate + ".txt");
-        file.write(nn.getResults());
+        String results = "NEURON DATA:\n";
+        results += "Random min: " + nn.getRandomMin() + "\n";
+        results += "Random max: " + nn.getRandomMax() + "\n";
+        results += "Learning rate: " + nn.getLearningRate() + "\n";
+        results += "Momentum: " + nn.getMomentum() + "\n";
+        results += "Number of hidden layers: " + nn.getHiddenLayerSize() + "\n";
+        results += "RESULTS:\n";
+        results += nn.getResults();
+        file.write(results);
 
         JSON.writeWeightFile("data/results/weights-" + errorRate + ".json", nn.getWeight());
         JSON.writeBiasWeightFile("data/results/bias-" + errorRate + ".json", nn.getBias());
