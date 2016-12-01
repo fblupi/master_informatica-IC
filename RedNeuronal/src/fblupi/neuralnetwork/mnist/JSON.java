@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package fblupi.neuralnetwork;
+package fblupi.neuralnetwork.mnist;
 
 import java.io.FileWriter;
 import java.io.FileReader;

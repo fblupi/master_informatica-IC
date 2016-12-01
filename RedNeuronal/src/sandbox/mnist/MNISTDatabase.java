@@ -1,5 +1,7 @@
 package sandbox.mnist;
 
+import fblupi.neuralnetwork.mnist.NeuralNetwork;
+import fblupi.neuralnetwork.mnist.JSON;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -13,7 +15,6 @@ import java.util.Locale;
 import java.util.logging.Logger;
 import java.util.zip.GZIPInputStream;
 
-import fblupi.neuralnetwork.*;
 import java.io.FileWriter;
 import org.json.simple.parser.ParseException;
 

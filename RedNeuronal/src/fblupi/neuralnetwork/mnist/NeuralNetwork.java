@@ -1,4 +1,4 @@
-package fblupi.neuralnetwork;
+package fblupi.neuralnetwork.mnist;
 
 import java.util.Random;
 
