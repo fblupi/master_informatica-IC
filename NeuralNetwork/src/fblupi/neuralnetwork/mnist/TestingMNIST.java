@@ -23,7 +23,7 @@ public class TestingMNIST {
 
     public static void main (String[] args) throws IOException, ParseException {
         boolean train = true;
-        int epochs = 50;
+        int epochs = 40;
         boolean getPreviousWeights = false;
         float previousWeightsError = 1.73f;
         int[][][] trainingImages, testImages;

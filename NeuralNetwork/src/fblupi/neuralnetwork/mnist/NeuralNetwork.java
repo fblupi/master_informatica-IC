@@ -30,7 +30,7 @@ public class NeuralNetwork {
     /**
      * Size of the hidden layer
      */
-    private final int HIDDEN_LAYER_SIZE = 256;
+    private final int HIDDEN_LAYER_SIZE = 384;
 
     /**
      * Size of the output layer = 10. One neuron for each possible result
