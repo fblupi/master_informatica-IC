@@ -22,10 +22,10 @@ public class TestingMNIST {
     private static final String TEST_LABELS = "t10k-labels-idx1-ubyte.gz";
 
     public static void main (String[] args) throws IOException, ParseException {
-        boolean train = true;
-        int epochs = 40;
-        boolean getPreviousWeights = false;
-        float previousWeightsError = 1.73f;
+        boolean train = false;
+        int epochs = 50;
+        boolean getPreviousWeights = true;
+        float previousWeightsError = 1.68f;
         int[][][] trainingImages, testImages;
         float[][][] trainingImagesNormalized, testImagesNormalized;
         int[] trainingLabels, testLabels;
