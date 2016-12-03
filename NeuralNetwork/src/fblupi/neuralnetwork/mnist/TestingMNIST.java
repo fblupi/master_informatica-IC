@@ -75,21 +75,29 @@ public class TestingMNIST {
             nn.trainAndTest(trainingImagesNormalized, trainingLabels, epochs, testImagesNormalized, testLabels);
         }
 
-        System.out.println("Testing...");
+        System.out.println("Testing with test images...");
 
-        float errorRate = nn.test(trainingImagesNormalized, trainingLabels);
-        System.out.println("ERROR RATE: " + errorRate + "%");
+        float errorRate = nn.test(testImagesNormalized, testLabels);
+        System.out.println("ERROR RATE (Test images): " + errorRate + "%");
 
-        FileWriter file = new FileWriter("data/results/test-" + errorRate + ".txt");
-        String results = "NEURON DATA:\n";
-        results += "Random min: " + nn.getRandomMin() + "\n";
-        results += "Random max: " + nn.getRandomMax() + "\n";
-        results += "Learning rate: " + nn.getLearningRate() + "\n";
-        results += "Momentum: " + nn.getMomentum() + "\n";
-        results += "Number of hidden layers: " + nn.getHiddenLayerSize() + "\n";
-        results += "RESULTS:\n";
-        results += nn.getResults();
-        file.write(results);
+        FileWriter fileData = new FileWriter("data/results/data-" + errorRate + ".txt");
+        fileData.write("Random min: " + nn.getRandomMin() + "\n"
+                + "Random max: " + nn.getRandomMax() + "\n"
+                + "Learning rate: " + nn.getLearningRate() + "\n"
+                + "Momentum: " + nn.getMomentum() + "\n"
+                + "Number of hidden layers: " + nn.getHiddenLayerSize() + "\n");
+        fileData.flush();
+
+        FileWriter fileResults = new FileWriter("data/results/results-" + errorRate + ".txt");
+        fileResults.write("Test:\n" + nn.getResults() + "\n");
+
+        System.out.println("Testing with training images...");
+
+        float errorRateTraining = nn.test(trainingImagesNormalized, trainingLabels);
+        System.out.println("ERROR RATE (Training images): " + errorRateTraining + "%");
+
+        fileResults.write("Training:\n" + nn.getResults() + "\n");
+        fileResults.flush();
 
         JSON.writeWeightFile("data/results/weights-" + errorRate + ".json", nn.getWeight());
         JSON.writeBiasWeightFile("data/results/bias-" + errorRate + ".json", nn.getBias());

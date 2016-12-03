@@ -1,0 +1,7 @@
+Random min: -0.1
+Random max: 0.1
+Learning rate: 0.017
+Momentum: 0.9
+Number of hidden layers: 784
+Epochs: 72
+Training time (sec): 12042
