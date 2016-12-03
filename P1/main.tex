@@ -1,0 +1,87 @@
+\input{estilo.tex}
+\usepackage{textcomp}
+
+%----------------------------------------------------------------------------------------
+%	DATOS
+%----------------------------------------------------------------------------------------
+
+\newcommand{\myName}{Francisco Javier Bolívar Lupiáñez}
+\newcommand{\myDegree}{Máster en Ingeniería Informática}
+\newcommand{\myFaculty}{E. T. S. de Ingenierías Informática y de Telecomunicación}
+\newcommand{\myDepartment}{Ciencias de la Computación e Inteligencia Artificial}
+\newcommand{\myUniversity}{\protect{Universidad de Granada}}
+\newcommand{\myLocation}{Granada}
+\newcommand{\myTime}{\today}
+\newcommand{\myTitle}{Práctica 1}
+\newcommand{\mySubtitle}{Redes neuronales: Reconocimiento óptico de caracteres MNIST}
+\newcommand{\mySubject}{Inteligencia Computacional}
+\newcommand{\myYear}{2016-2017}
+
+%----------------------------------------------------------------------------------------
+%	PORTADA
+%----------------------------------------------------------------------------------------
+
+
+\title{	
+	\normalfont \normalsize 
+	\textsc{\textbf{\mySubject \space (\myYear)} \\ \myDepartment} \\[20pt] % Your university, school and/or department name(s)
+	\textsc{\myDegree \\[10pt] \myFaculty \\ \myUniversity} \\[25pt]
+	\horrule{0.5pt} \\[0.4cm] % Thin top horizontal rule
+	\huge \myTitle: \mySubtitle \\ % The assignment title
+	\horrule{2pt} \\[0.5cm] % Thick bottom horizontal rule
+	\normalfont \normalsize
+}
+
+\author{\myName} % Nombre y apellidos
+
+\date{\myTime} % Incluye la fecha actual
+%----------------------------------------------------------------------------------------
+%	INDICE
+%----------------------------------------------------------------------------------------
+
+\begin{document}
+	
+\setcounter{page}{0}
+
+\maketitle % Muestra el Título
+\thispagestyle{empty}
+
+\newpage %inserta un salto de página
+
+\tableofcontents % para generar el índice de contenidos
+
+%\listoffigures
+
+\newpage
+
+%----------------------------------------------------------------------------------------
+%	DOCUMENTO
+%----------------------------------------------------------------------------------------
+
+\section{Introducción}
+
+Lorem ipsum dolor sit amet, \textbf{consectetur} adipiscing elit. Cras non luctus augue, at rutrum odio. Vestibulum nisi ante, eleifend sed faucibus vel, egestas in tortor. Sed finibus nunc orci, id sagittis sapien porta in. Nunc malesuada lacus tellus, ac posuere lacus vulputate a. Proin in blandit velit. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Mauris bibendum nibh gravida lobortis tristique. Mauris sagittis nisl eu magna scelerisque rutrum. Proin lacus ex, iaculis id turpis volutpat, vehicula fermentum lectus. Pellentesque eleifend magna vitae lorem consequat porttitor. Nam imperdiet maximus ipsum eu tempus \cite{backpropagation-au}.
+
+\section{Implementación}
+
+Lorem ipsum dolor sit amet, \textbf{consectetur} adipiscing elit. Cras non luctus augue, at rutrum odio. Vestibulum nisi ante, eleifend sed faucibus vel, egestas in tortor. Sed finibus nunc orci, id sagittis sapien porta in. Nunc malesuada lacus tellus, ac posuere lacus vulputate a. Proin in blandit velit. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Mauris bibendum nibh gravida lobortis tristique. Mauris sagittis nisl eu magna scelerisque rutrum. Proin lacus ex, iaculis id turpis volutpat, vehicula fermentum lectus. Pellentesque eleifend magna vitae lorem consequat porttitor. Nam imperdiet maximus ipsum eu tempus \cite{backpropagation-de}.
+
+\section{Resultados}
+
+Lorem ipsum dolor sit amet, \textbf{consectetur} adipiscing elit. Cras non luctus augue, at rutrum odio. Vestibulum nisi ante, eleifend sed faucibus vel, egestas in tortor. Sed finibus nunc orci, id sagittis sapien porta in. Nunc malesuada lacus tellus, ac posuere lacus vulputate a. Proin in blandit velit. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Mauris bibendum nibh gravida lobortis tristique. Mauris sagittis nisl eu magna scelerisque rutrum. Proin lacus ex, iaculis id turpis volutpat, vehicula fermentum lectus. Pellentesque eleifend magna vitae lorem consequat porttitor. Nam imperdiet maximus ipsum eu tempus.
+
+\section{Conclusiones}
+
+Lorem ipsum dolor sit amet, \textbf{consectetur} adipiscing elit. Cras non luctus augue, at rutrum odio. Vestibulum nisi ante, eleifend sed faucibus vel, egestas in tortor. Sed finibus nunc orci, id sagittis sapien porta in. Nunc malesuada lacus tellus, ac posuere lacus vulputate a. Proin in blandit velit. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Mauris bibendum nibh gravida lobortis tristique. Mauris sagittis nisl eu magna scelerisque rutrum. Proin lacus ex, iaculis id turpis volutpat, vehicula fermentum lectus. Pellentesque eleifend magna vitae lorem consequat porttitor. Nam imperdiet maximus ipsum eu tempus.
+
+
+%----------------------------------------------------------------------------------------
+%	REFERENCIAS
+%----------------------------------------------------------------------------------------
+
+\newpage
+
+\bibliography{referencias} %archivo referencias.bib que contiene las entradas 
+\bibliographystyle{plain} % hay varias formas de citar
+
+\end{document}
