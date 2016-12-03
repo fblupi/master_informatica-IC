@@ -23,9 +23,9 @@ public class TestingMNIST {
 
     public static void main (String[] args) throws IOException, ParseException {
         boolean train = false;
-        int epochs = 50;
+        int epochs = 100;
         boolean getPreviousWeights = true;
-        float previousWeightsError = 1.68f;
+        float previousWeightsError = 1.64f;
         int[][][] trainingImages, testImages;
         float[][][] trainingImagesNormalized, testImagesNormalized;
         int[] trainingLabels, testLabels;
@@ -77,7 +77,7 @@ public class TestingMNIST {
 
         System.out.println("Testing...");
 
-        float errorRate = nn.test(testImagesNormalized, testLabels);
+        float errorRate = nn.test(trainingImagesNormalized, trainingLabels);
         System.out.println("ERROR RATE: " + errorRate + "%");
 
         FileWriter file = new FileWriter("data/results/test-" + errorRate + ".txt");
