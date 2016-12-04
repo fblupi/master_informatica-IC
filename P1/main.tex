@@ -60,19 +60,82 @@
 
 \section{Introducción}
 
-Lorem ipsum dolor sit amet, \textbf{consectetur} adipiscing elit. Cras non luctus augue, at rutrum odio. Vestibulum nisi ante, eleifend sed faucibus vel, egestas in tortor. Sed finibus nunc orci, id sagittis sapien porta in. Nunc malesuada lacus tellus, ac posuere lacus vulputate a. Proin in blandit velit. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Mauris bibendum nibh gravida lobortis tristique. Mauris sagittis nisl eu magna scelerisque rutrum. Proin lacus ex, iaculis id turpis volutpat, vehicula fermentum lectus. Pellentesque eleifend magna vitae lorem consequat porttitor. Nam imperdiet maximus ipsum eu tempus \cite{backpropagation-au}.
+Las redes neuronales son muy utilizadas para el reconocimiento de patrones. Y se podría decir que el hola mundo de éstas es la base de datos MNIST \footnote{\url{http://yann.lecun.com/exdb/mnist/}} para el Reconocimiento Óptico de Caracteres (OCR).
+\\ \\
+Esta base de datos contiene 60.000 imágenes de números (Figura \ref{fig:sample-mnist-data}) para entrenar la red neuronal y 10.000 para probarla. Cada una de estas imágenes de un tamaño de 28x28 píxeles.
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=6cm]{img/sample-mnist-data}
+	\caption{Muestra de algunas de las imágenes de números de la base de datos MNIST}
+	\label{fig:sample-mnist-data}
+\end{figure}
+El objetivo de esta práctica es el estudio del uso de distintas redes neuronales para resolver este problema obteniendo el mínimo porcentaje de error posible.
+\\ \\
+Para ello, se ha realizado durante varias semanas de clase una introducción desde cero de los distintos métodos que podrían utilizarse. Desde un perceptrón simple hasta redes neuronales convolucionales.
 
 \section{Implementación}
 
-Lorem ipsum dolor sit amet, \textbf{consectetur} adipiscing elit. Cras non luctus augue, at rutrum odio. Vestibulum nisi ante, eleifend sed faucibus vel, egestas in tortor. Sed finibus nunc orci, id sagittis sapien porta in. Nunc malesuada lacus tellus, ac posuere lacus vulputate a. Proin in blandit velit. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Mauris bibendum nibh gravida lobortis tristique. Mauris sagittis nisl eu magna scelerisque rutrum. Proin lacus ex, iaculis id turpis volutpat, vehicula fermentum lectus. Pellentesque eleifend magna vitae lorem consequat porttitor. Nam imperdiet maximus ipsum eu tempus \cite{backpropagation-de}.
+La primera decisión que tuve que tomar fue la de qué lenguaje de programación y librerías utilizar. 
+\\ \\
+Me hacía ilusión \textbf{realizar una red neuronal sin la ayuda de ninguna librería}, por lo que descarté desde un principio la posibilidad de utilizar alguna librería que me pudiese facilitar el trabajo. 
+\\ \\
+Dado que se proporcionaron algoritmos para la lectura de los datos de MNIST tanto en Java y MatLab, y no conocía ni había usado antes MatLab, \textbf{decidí usar Java}, un lenguaje de programación que domino con soltura después de varios años de experiencia utilizando para distintas prácticas del grado en ingeniería informática.
+
+\subsection{Una primera solución}
+
+La primera solución que probé para resolver el problema, fue la idea que se presentó el primer día de clase, que trataba de \textbf{crear plantillas según las imágenes de entrenamiento}.
+\\ \\
+Para entrenar, se recorre cada imagen de entrenamiento y, para cada píxel de la imagen, se ve si tiene tinta o no. Si la tiene, se le suma valor a ese píxel en la plantilla con el mismo índice que la etiqueta de la imagen que se está utilizando para entrenar. Si por el contrario no tiene tinta, lo que se hace es restar.
+\\ \\
+Una vez entrenada, para ver cuál es el número de una imagen de test, por cada píxel con tinta, se ve si se tiene un valor positivo en cada una de las plantillas, y para el que tenga, se le añade un voto. Una vez recorridos todos los píxeles de la imagen, se hace un recuento de votos, y la plantilla que haya obtenido más votos es la que indica el número que se ve en la imagen.
+\\ \\
+Esta solución. Al iniciar siempre a cero los valores de las plantillas generaba siempre el mismo \textbf{resultado que era el de un 55,8\%}.
+\\ \\
+Esta tasa de error \textbf{se redujo hasta un 34,09\% al reforzar los píxeles con tinta} sumando 5 en vez de 1 a la plantilla.
+
+\subsection{\textit{Backpropagation}}
+
+La falta de tiempo por la proximidad de la fecha de entrega tras haber dejado aparcada la práctica varias semanas hizo que pasase directamente de esta primera y muy básica solución a la realización de algo que pudiese bajar del 10\% de error. Por lo que pasé de realizar el perceptrón simple con el que obtendría unos resultados similares a los ya obtenidos y me puse manos a la obra con una red neuronal multicapa con \textit{backpropagation}.
+
+\subsubsection{\textit{Backpropagation} simple con una sola época}
+
+Realicé una primera implementación con la siguiente topología:
+\begin{itemize}
+	\item \textbf{Número de capas}: Tres capas. Capa de entrada, oculta y de salida
+	\item \textbf{Tamaño de capa de entrada}: 28x28. Tantas neuronas como píxeles en la imagen
+	\item \textbf{Tamaño de capa de salida}: 10. Tantas neuronas como posibles soluciones. Si tiene valor 1, o lo ronda, significará que el número de la imagen corresponde al índice de esa neurona
+	\item \textbf{Pesos}: Un peso por cada conexión entre neurona inicializados entre -1,67 y 1,67
+	\item \textbf{Función de activación}: Sigmoidal
+	\item \textbf{Ratio de aprendizaje}: 0,7
+	\item \textbf{Tipo de aprendizaje}: Estocástico. Reajuste de pesos tras cada imagen
+\end{itemize}
+Los resultados obtenidos tras una sola época eran malos, rondaban el 90\%. Y no solo era por inicializar los pesos de las neuronas a unos valores tan grandes, ni por ese ratio excesivamente grande. El problema era que había calculado mal las funciones utilizadas para reajustar los pesos.
+\\ \\
+Para solucionar esto estuve leyendo varios artículos \cite{backpropagation-de} \cite{backpropagation-au} que me ayudaron a encontrar los fallos que tenía. Antes de empezar a depurar los fallos, cambié el número de neuronas en la capa oculta para que el tiempo de entrenamiento fuese más corto y usé 100 neuronas en ésta capa.
+\\ \\
+Una vez resueltos estos fallos, añadido el sesgo y su peso (\textit{bias}) a cada neurona y cambiado los valores tanto de inicialización de los pesos (-0,1 y 0,1) y el ratio de aprendizaje (0,17), en una sola época se obtuvo un \textbf{resultado que rondó el 10\%}.
+
+\subsubsection{\textit{Backpropagation} usando momentos y varias épocas}
+
+Para mejorar los resultados podía aplicar \textit{softmax}, pero el tiempo con el que contaba era escaso, por lo que el siguiente paso que podía dar sin agotar mucho tiempo era el del uso de momentos.
+\\ \\
+No obstante, el uso que hice de este método no es el que se hace de él normalmente. Pues en lugar de variar el valor del momento de 0,5 al principio hasta 0,9 lo iniciaba directamente a 0,9. No se aprovecha de esta forma todas las ventajas que se podrían llegar a tener durante la oscilación en el gradiente descendente, pero sí mejoraba los resultados \textbf{de en torno a un 4\% tras diez épocas con la topología anterior} (con 256 neuronas en la capa oculta) \textbf{a un 2\%} solo añadiendo la constante del momento, multiplicada por la variación del peso anterior, a la variación del peso actual \cite{backpropagation-au}.
+
+\subsubsection{Topología de la red neuronal final}
+
+La red neuronal final se podría definir como una red neuronal multicapa, que usa una función de activación sigmoidal, \textit{backpropagation} con momentos y aprendizaje estocástico.
+
+\subsubsection{Ajustando constantes}
+
+Lala
 
 \section{Resultados}
 
-Lorem ipsum dolor sit amet, \textbf{consectetur} adipiscing elit. Cras non luctus augue, at rutrum odio. Vestibulum nisi ante, eleifend sed faucibus vel, egestas in tortor. Sed finibus nunc orci, id sagittis sapien porta in. Nunc malesuada lacus tellus, ac posuere lacus vulputate a. Proin in blandit velit. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Mauris bibendum nibh gravida lobortis tristique. Mauris sagittis nisl eu magna scelerisque rutrum. Proin lacus ex, iaculis id turpis volutpat, vehicula fermentum lectus. Pellentesque eleifend magna vitae lorem consequat porttitor. Nam imperdiet maximus ipsum eu tempus.
+Lala
 
 \section{Conclusiones}
 
-Lorem ipsum dolor sit amet, \textbf{consectetur} adipiscing elit. Cras non luctus augue, at rutrum odio. Vestibulum nisi ante, eleifend sed faucibus vel, egestas in tortor. Sed finibus nunc orci, id sagittis sapien porta in. Nunc malesuada lacus tellus, ac posuere lacus vulputate a. Proin in blandit velit. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Mauris bibendum nibh gravida lobortis tristique. Mauris sagittis nisl eu magna scelerisque rutrum. Proin lacus ex, iaculis id turpis volutpat, vehicula fermentum lectus. Pellentesque eleifend magna vitae lorem consequat porttitor. Nam imperdiet maximus ipsum eu tempus.
+Lala
 
 
 %----------------------------------------------------------------------------------------
