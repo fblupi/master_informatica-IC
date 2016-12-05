@@ -128,27 +128,15 @@ public class NeuralNetwork {
      */
     public void trainAndTest(float[][][] trainingImages, int[] trainingResults, int epochs, float[][][] testImages,
                              int[] testResults) {
-        float min = 1.64f;
         for (int e = 0; e < epochs; e++) {
             System.out.println("Epoch " + (e + 1) + "/" + epochs + "...");
             for (int i = 0; i < trainingImages.length; i++) {
                 trainSingleImage(trainingImages[i], trainingResults[i]);
             }
-            if ((e + 1) > 30) {
+            if ((e + 1) % 5 == 0) {
                 System.out.println("Testing...");
                 float error = test(testImages, testResults);
                 System.out.println("ERROR RATE: " + error + "%");
-                if (error < min) {
-                    min = error;
-                    System.out.println("Exporting weights...");
-                    try {
-                        JSON.writeWeightFile("data/results/weights-" + error + ".json", weight);
-                        JSON.writeBiasWeightFile("data/results/bias-" + error + ".json", bias);
-                    } catch (IOException exception) {
-                        exception.printStackTrace();
-                    }
-                    System.out.println("Updated in epoch " + (e + 1));
-                }
             }
         }
     }

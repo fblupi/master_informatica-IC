@@ -13,7 +13,7 @@
 \newcommand{\myLocation}{Granada}
 \newcommand{\myTime}{\today}
 \newcommand{\myTitle}{Práctica 1}
-\newcommand{\mySubtitle}{Redes neuronales: Reconocimiento óptico de caracteres MNIST}
+\newcommand{\mySubtitle}{Redes neuronales. Reconocimiento óptico de caracteres MNIST}
 \newcommand{\mySubject}{Inteligencia Computacional}
 \newcommand{\myYear}{2016-2017}
 
@@ -81,7 +81,7 @@ Me hacía ilusión \textbf{realizar una red neuronal sin la ayuda de ninguna lib
 \\ \\
 Dado que se proporcionaron algoritmos para la lectura de los datos de MNIST tanto en Java y MatLab, y no conocía ni había usado antes MatLab, \textbf{decidí usar Java}, un lenguaje de programación que domino con soltura después de varios años de experiencia utilizando para distintas prácticas del grado en ingeniería informática.
 
-\subsection{Una primera solución}
+\subsection{Una primera solución: plantillas}
 
 La primera solución que probé para resolver el problema, fue la idea que se presentó el primer día de clase, que trataba de \textbf{crear plantillas según las imágenes de entrenamiento}.
 \\ \\
@@ -121,17 +121,229 @@ Para mejorar los resultados podía aplicar \textit{softmax}, pero el tiempo con 
 \\ \\
 No obstante, el uso que hice de este método no es el que se hace de él normalmente. Pues en lugar de variar el valor del momento de 0,5 al principio hasta 0,9 lo iniciaba directamente a 0,9. No se aprovecha de esta forma todas las ventajas que se podrían llegar a tener durante la oscilación en el gradiente descendente, pero sí mejoraba los resultados \textbf{de en torno a un 4\% tras diez épocas con la topología anterior} (con 256 neuronas en la capa oculta) \textbf{a un 2\%} solo añadiendo la constante del momento, multiplicada por la variación del peso anterior, a la variación del peso actual \cite{backpropagation-au}.
 
-\subsubsection{Topología de la red neuronal final}
+\subsection{Topología de la red neuronal final}
 
 La red neuronal final se podría definir como una red neuronal multicapa, que usa una función de activación sigmoidal, \textit{backpropagation} con momentos y aprendizaje estocástico.
 
-\subsubsection{Ajustando constantes}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=14.5cm]{img/neural-network}
+	\caption{Esquema gráfico de la red neuronal propuesta}
+	\label{fig:neural-network}
+\end{figure}
 
-Lala
+\subsubsection{\textit{Feed forward propagation}}
+
+Las salidas de la primera capa serán las entradas de la red neuronal, correspondientes a los valores de cada uno de los píxeles de la imagen.
+
+Para calcular la salida durante la \textit{feed forward propagation} en la capa \textit{k} y la neurona \textit{i} se usa la siguiente función:
+
+\[ x^{(k)}_{i} = \sum_{j=0}^{k_{size}-1}(w^{(k)}_{i,j} O^{(k-1)}_{j}) + \theta^{(k)}_{i} \]
+
+donde:
+\begin{itemize}
+	\item $ w^{(k)}_{i,j} $ es el peso de la conexión entre la neurona \textit{i} de la capa \textit{k} y la neurona \textit{j} de la capa \textit{k-1}
+	\item $ O^{(k-1)}_{j} $ es la salida de la neurona \textit{j} en la capa \textit{k-1}
+	\item $ \theta^{(k)}_{i} $ es el peso del \textit{bias} en la neurona \textit{i} de la capa \textit{k}
+\end{itemize}
+
+Y a este resultado se le aplica la función sigmoidal:
+
+\[O^{(k)}_{i} = \dfrac{1}{1 + e^{x^{(k)}_{i}}} \]
+
+\subsubsection{\textit{Backpropagation} en la capa de salida}
+
+Para calcular la variación de los pesos, en primer lugar, hay que calcular la señal de error:
+
+\[ \delta^{(k)}_{i} = (t^{(k)}_{i} - O^{(k)}_{i}) O^{(k)}_{i} (1 - O^{(k)}_{i}) \]
+
+donde:
+\begin{itemize}
+	\item $ t^{(k)}_{i} $ es el valor objetivo de la neurona \textit{i} de la capa \textit{k}
+	\item $ O^{(k)}_{i} $ es la salida de la neurona \textit{i} en la capa \textit{k}
+\end{itemize}
+
+Con la señal de error calculada se puede calcular la variación del peso:
+
+\[ \Delta w^{(k)}_{i,j} = \delta^{(k)}_{i} O^{(k-1)}_{j} \eta + \Delta w^{(k)}_{i,j} \mu \]
+
+donde:
+\begin{itemize}
+	\item $ \delta^{(k)}_{i} $ es la señal de error calculada anteriormente
+	\item $ O^{(k-1)}_{j} $ es la salida de la neurona \textit{j} en la capa \textit{k-1}
+	\item $ \Delta w^{(k)}_{i,j} $ es la variación anterior de ese peso
+	\item $ \eta $ es el ratio de aprendizaje
+	\item $ \mu $ es el valor del momento
+\end{itemize}
+
+Y finalmente, para calcular el nuevo valor del peso, solo hay que sumar la variación calculada al peso actual.
+
+\[ w^{(k)}_{i,j} = w^{(k)}_{i,j} +\Delta w^{(k)}_{i,j} \]
+
+\subsubsection{\textit{Backpropagation} en la capa oculta}
+
+Para calcular la variación del peso en la capa oculta, lo único que cambiaría con respecto a lo descrito anteriormente para la capa de salida es la señal de error ya que no se conocen los valores objetivos de las neuronas en la capa oculta:
+
+\[ \delta^{(k)}_{i} = \sum_{j=0}^{(k+1)_{size}-1}(\delta^{(k+1)}_{j} w^{(k+1)}_{i,j}) O^{(k)}_{i} (1 - O^{(k)}_{i}) \]
+
+\subsection{Ajuste de parámetros}
+
+Una vez definida la red neuronal, queda ajustar los parámetros para obtener el mejor resultado posible.
+
+Los parámetros a ajustar son:
+\begin{itemize}
+	\item Neuronas en la capa oculta
+	\item Tasa de aprendizaje
+	\item Número de épocas
+\end{itemize}
+
+Para ello se han realizado experimentos para ver cómo funcionan todos estos parámetros y cómo se relacionan los unos con los otros.
+
+\subsubsection{Número de neuronas en la capa oculta y épocas}
+
+Se han realizado pruebas con capas ocultas de 100, 200, 300 y 400 neuronas, de 5, 10, 15, 20, 25, 30, 35, 40, 45 y 50 épocas con un valor fijo en la tasa de aprendizaje de 0,017.
+
+\begin{table}[H]
+\centering
+\caption{Porcentaje de error según número de neuronas en la capa oculta y número de épocas}
+\label{tab:hidden-size-and-epochs}
+\begin{tabular}{| c | c | c | c | c |}
+	\hline
+	   & 100  & 200  & 300  & 400  \\ 
+	\hline
+	5  & 3,00 & 2,70 & 2,47 & 2,39 \\
+	10 & 2,46 & 2,27 & 2,10 & 2,01 \\
+	15 & 2,21 & 2,05 & 1,93 & 1,85 \\
+	20 & 2,22 & 1,91 & 1,80 & 1,77 \\
+	25 & 2,23 & 1,92 & 1,74 & 1,71 \\
+	30 & 2,26 & 1,92 & 1,74 & 1,70 \\
+	35 & 2,25 & 1,91 & 1,75 & 1,70 \\
+	40 & 2,28 & 1,91 & 1,76 & 1,72 \\
+	45 & 2,27 & 1,92 & 1,75 & 1,70 \\
+	50 & 2,26 & 1,93 & 1,76 & 1,72 \\ 
+	\hline
+\end{tabular}
+\end{table}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=14cm]{img/hidden-size-and-epochs}
+	\caption{Gráfico con el porcentaje de error según número de neuronas en la capa oculta y número de épocas}
+	\label{fig:hidden-size-and-epochs}
+\end{figure}
+
+Con este pequeño experimento se han podido sacar varias conclusiones. 
+\begin{itemize}
+	\item A mayor número de neuronas en la capa oculta mejor resultado en cuanto a porcentaje de error
+	\item A mayor número de neuronas en la capa oculta más épocas se necesitan para que aprendan
+\end{itemize}
+
+\subsubsection{Número de neuronas en la capa oculta y tiempo de ejecución}
+
+Aunque en un principio el tiempo de ejecución no es algo crítico, pues se puede dejar a la red neuronal aprendiendo durante horas o días, para esta práctica voy a utilizar un tamaño con el que los tiempos de ejecución sean razonables y no tenga que tener el ordenador conectado un día entero mientras la neurona está aprendiendo.
+
+Por lo que se ha medido el tiempo de ejecución de una época para capas ocultas con 100, 200, 300, 400, 500, 600, 700 y 800 neuronas.
+\begin{table}[H]
+	\centering
+	\caption{Tiempo de entrenamiento con una una sola época variando neuronas en la capa oculta}
+	\label{tab:one-epoch-run-time}
+	\begin{tabular}{| c | c |}
+		\hline
+		capa oculta & tiempo (seg.) \\ 
+		\hline
+		100 & 21 \\
+		200 & 40 \\
+		300 & 62 \\
+		400 & 84 \\
+		500 & 115 \\
+		600 & 145 \\
+		700 & 171 \\
+		800 & 191 \\
+		\hline
+	\end{tabular}
+\end{table}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=14cm]{img/one-epoch-run-time}
+\caption{Gráfico con el tiempo de entrenamiento con una sola época variando neuronas en la capa oculta}
+\label{fig:one-epoch-run-time}
+\end{figure}
+
+El comportamiento que sigue es más o menos lineal y, visto que una época con 800 neuronas en la capa oculta ronda los tres minutos y\textbf{ la capa de entrada es de 784, le voy a dar el mismo número de neuronas a la capa oculta}, por lo que un entrenamiento de 50 épocas rondaría las dos horas y media.
+
+\subsubsection{Tasa de aprendizaje}
+
+Los experimentos utilizados hasta ahora han sido utilizando una tasa de aprendizaje de 0,017. Se sabe que a menor sea la tasa de aprendizaje mayor será el número de épocas necesarias para aprender. Y ya que no se quiere exceder mucho el tiempo de ejecución, no se usarán tasas de aprendizaje demasiado pequeñas. Ni tampoco tan grandes como para que sobreaprenda en pocas épocas.
+\\ \\
+Se calculará la tasa de error tras 30 épocas en una red neuronal con 768 neuronas ocultas, para tasas de aprendizaje de 0,005, 0,01, 0,05 y 0,1 para ver si la tasa de aprendizaje fijada hasta ahora está en un rango con el que se producen resultados apropiados.
+\begin{table}[H]
+	\centering
+	\caption{Porcentaje de error variando tasa de aprendizaje}
+	\label{tab:learning-rate}
+	\begin{tabular}{| c | c | c | c | c |}
+		\hline
+		  & 0,005 & 0,01 & 0,05 & 0,1  \\ 
+		\hline
+		5  & 3,81 & 2,78 & 2,27 & 3,40 \\
+		10 & 2,73 & 2,15 & 2,09 & 3,14 \\
+		15 & 2,29 & 1,91 & 1,81 & 2,96 \\
+		20 & 2,05 & 1,81 & 1,74 & 2,67 \\
+		25 & 2,00 & 1,76 & 1,68 & 2,71 \\
+		30 & 1,97 & 1,68 & 1,69 & 2,68 \\
+		35 & 1,95 & 1,64 & 1,68 & 2,66 \\
+		40 & 1,85 & 1,64 & 1,67 & 2,71 \\
+		45 & 1,80 & 1,65 & 1,68 & 2,73 \\
+		50 & 1,79 & 1,66 & 1,69 & 2,72 \\ 
+		\hline
+	\end{tabular}
+\end{table}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=14cm]{img/learning-rate}
+\caption{Gráfico con el porcentaje de error variando tasa de aprendizaje}
+\label{fig:learning-rate}
+\end{figure}
+
+Se puede ver cómo con la tasa de aprendizaje más pequeña (0,001), en 50 épocas no se llega a obtener todavía el resultado óptimo, pues todavía estaba bajando el porcentaje de error cuando se paró la ejecución. Y como se estudió antes, más de 50 épocas puede implicar más de dos horas y media, por lo que se optará por una tasa de aprendizaje algo más grande.
+\\ \\
+Con la tasa de aprendizaje más alta (0,1) sobreaprende demasiado pronto obteniendo los peores resultados.
+\\ \\
+Con las tasas que mejor se comporta es con las intermedias (0,01 y 0,05). Con las más alta de las dos necesita menos épocas para estabilizarse, pero obtiene un peor resultado que con la más baja de éstas, que aunque necesita diez épocas más para obtener su mejor resultado, éste mejora en tres centésimas al mejor obtenido con la otra.
+\\ \\
+La diferencia no es muy alta, por lo que \textbf{una tasa de aprendizaje entre 0,01 y 0,05 es la ideal} en esta red neuronal con los parámetros establecidos anteriormente para obtener el mejor resultado en menos de 50 épocas.
+
+\subsubsection{Número de épocas}
+
+Para ver el número de épocas necesario lo que se hará es ir comprobando el porcentaje de error que se obtendría cada vez que se actualizan los pesos, y si es menor que el menor obtenido hasta el momento, exportar esos pesos. De esta forma, aunque el tiempo de ejecución sea muy elevado, se podrá dejar trabajando solo sabiendo que se extraerá el mejor de los pesos encontrados durante un número de épocas que se ha fijado en 50.
+\\ \\
+Si se monitoriza, se ve que se ha estancado y deja de mejorar; se corta la ejecución para que no realice las épocas restantes.
+\\ \\
+De esta forma. Con 784 neuronas en la capa oculta y un ratio de aprendizaje de 0,017 \textbf{se ha obtenido el mejor resultado sobre las imágenes de test en 33 épocas} (1,63\% de error y 0,32\% sobre el conjunto de imágenes de entrenamiento).
 
 \section{Resultados}
 
-Lala
+En esta sección voy a presentar una tabla con los resultados que fui obteniendo con las distintas redes neuronales que he ido desarrollando hasta llegar a obtener mi mejor resultado (Tabla \ref{tab:results}).
+
+\begin{table}[H]
+	\centering
+	\caption{Resultados obtenidos durante el transcurso de la práctica}
+	\label{tab:results}
+	\begin{tabular}{| l | c | c | c | c |}
+		\hline
+		Versión & Épocas & Neuronas en capa oculta & $\eta$ & \% Error \\ 
+		\hline
+		Plantillas & 1 & - & - & 55,8 \\
+		Plantillas con refuerzo & 1 & - & - & 34,09 \\
+		Backpropagation & 1 & 784 & 0,1 & 9,8 \\
+		Backpropagation & 25 & 100 & 0,017 & 3,4 \\
+		Backpropagation & 25 & 400 & 0,017 & 2,15 \\
+		Backpropagation con momentos & 25 & 400 & 0,017 & 1,71 \\
+		Backpropagation con momentos & 33 & 784 & 0,017 & 1,63 \\
+		\hline
+	\end{tabular}
+\end{table}
 
 \section{Conclusiones}
 
