@@ -10,7 +10,7 @@ import java.util.Arrays;
 public class QAPSolver {
     public static void main(String[] args) throws FileNotFoundException {
         System.out.println("Reading matrices...");
-        QAPMatrices matrices = new QAPMatrices(new File("data/qap/tai256c.dat"));
+        QAPMatrices matrices = new QAPMatrices(new File("data/qap/tai60a.dat"));
         BasicAlgorithm algorithm = new BasicAlgorithm(matrices);
         System.out.println("Executing basic algorithm...");
         algorithm.execute();

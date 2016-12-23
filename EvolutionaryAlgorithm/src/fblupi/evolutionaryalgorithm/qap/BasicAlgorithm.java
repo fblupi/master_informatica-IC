@@ -1,6 +1,5 @@
 package fblupi.evolutionaryalgorithm.qap;
 
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
@@ -12,22 +11,22 @@ public class BasicAlgorithm {
     /**
      * Mutation probability after crossover
      */
-    private final double MUTATION_PROBABILITY = 0.2;
+    private final double MUTATION_PROBABILITY = 0.3;
 
     /**
      * Number of generations
      */
-    private final int NUMBER_OF_GENERATIONS = 100;
+    private final int NUMBER_OF_GENERATIONS = 10000;
 
     /**
      * Population size
      */
-    private final int POPULATION_SIZE = 500;
+    private final int POPULATION_SIZE = 50;
 
     /**
      * Number of tournament participants
      */
-    private final int TOURNAMENT_SIZE = 10;
+    private final int TOURNAMENT_SIZE = 16;
     private Population population;
     private QAPMatrices matrices;
 
@@ -81,7 +80,7 @@ public class BasicAlgorithm {
         for (int i = 0; i < TOURNAMENT_SIZE; i++) {
             int participant;
             do {
-                participant = r.nextInt(matrices.getSize());
+                participant = r.nextInt(POPULATION_SIZE);
             } while (participants.contains(participant));
             tournament.getPopulation()[i] = population.getPopulation()[participant];
         }
