@@ -26,19 +26,10 @@ public class QAPMatrices {
 
     /**
      * Constructor. Set input file with the data of the matrices
-     * @param file
+     * @param file file with the data of the matrices
      * @throws FileNotFoundException
      */
     public QAPMatrices(File file) throws FileNotFoundException {
-        setInput(file);
-    }
-
-    /**
-     * Set input file with the data of the matrices
-     * @param file
-     * @throws FileNotFoundException
-     */
-    public void setInput(File file) throws FileNotFoundException {
         Scanner scanner = new Scanner(file);
         n = scanner.nextInt();
         d = new int[n][n];
@@ -61,7 +52,7 @@ public class QAPMatrices {
      * Get number of installations
      * @return number of installations
      */
-    public int n() {
+    public int getSize() {
         return n;
     }
 
@@ -69,7 +60,7 @@ public class QAPMatrices {
      * Get distance matrix
      * @return distance matrix
      */
-    public int[][] d() {
+    public int[][] getDistanceMatrix() {
         return d;
     }
 
@@ -77,7 +68,7 @@ public class QAPMatrices {
      * Get material flow matrix
      * @return material flow matrix
      */
-    public int[][] w() {
+    public int[][] getFlowMatrix() {
         return w;
     }
 }
