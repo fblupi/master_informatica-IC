@@ -5,9 +5,9 @@ import java.util.Random;
 import java.util.Set;
 
 /**
- * Basic evolutionary algorithm
+ * Standard evolutionary algorithm
  */
-public class BasicAlgorithm {
+public class EA {
     /**
      * Mutation probability after crossover
      */
@@ -16,7 +16,7 @@ public class BasicAlgorithm {
     /**
      * Number of generations
      */
-    private final int NUMBER_OF_GENERATIONS = 500;
+    private final int NUMBER_OF_GENERATIONS = 200;
 
     /**
      * Population size
@@ -27,15 +27,25 @@ public class BasicAlgorithm {
      * Number of tournament participants
      */
     private final int TOURNAMENT_SIZE = 10;
+
+    /**
+     * Type of the evolutionary algorithm
+     */
+    private EAType type;
+
+    /**
+     * Input matrices
+     */
+    private Matrices matrices;
     private Population population;
-    private QAPMatrices matrices;
 
     /**
      * Constructor. Copy input matrices and initialize population
      * @param matrices input matrices
      */
-    public BasicAlgorithm(QAPMatrices matrices) {
+    public EA(EAType type, Matrices matrices) {
         this.matrices = matrices;
+        this.type = type;
         population = new Population(POPULATION_SIZE);
         population.initialize(matrices.getSize());
         population.calculateFitness(matrices);
@@ -69,7 +79,7 @@ public class BasicAlgorithm {
                 generation.getPopulation()[2 * j + 1] = children[1];
             }
             population = generation; // Evolve into the new generation
-            System.out.println("Generation " + (i + 1) + " -> " + population.getFittest().getFitness());
+            System.out.println("Generation " + (i + 1) + " -> " + getFittest().getFitness());
         }
     }
 
@@ -88,7 +98,7 @@ public class BasicAlgorithm {
             } while (participants.contains(participant));
             tournament.getPopulation()[i] = population.getPopulation()[participant];
         }
-        return tournament.getFittest();
+        return tournament.getFittest(type);
     }
 
     /**
@@ -177,11 +187,10 @@ public class BasicAlgorithm {
     }
 
     /**
-     * Get population
-     * @return population
+     * Get fittest individual
+     * @return fittest individual
      */
-    public Population getPopulation() {
-        return population;
+    public Individual getFittest() {
+        return population.getFittest(type);
     }
-
 }

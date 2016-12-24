@@ -5,10 +5,10 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 /**
- * QAPMatrices matrix reader
+ * Matrices matrix reader
  * @author fblupi
  */
-public class QAPMatrices {
+public class Matrices {
     /**
      * Number of installations
      */
@@ -29,7 +29,7 @@ public class QAPMatrices {
      * @param file file with the data of the matrices
      * @throws FileNotFoundException
      */
-    public QAPMatrices(File file) throws FileNotFoundException {
+    public Matrices(File file) throws FileNotFoundException {
         Scanner scanner = new Scanner(file);
         n = scanner.nextInt();
         d = new int[n][n];

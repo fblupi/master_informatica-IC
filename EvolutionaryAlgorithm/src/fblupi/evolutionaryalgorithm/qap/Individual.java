@@ -26,6 +26,16 @@ public class Individual {
     }
 
     /**
+     * Copy constructor
+     * @param other individual that will be copied
+     */
+    public Individual(Individual other) {
+        solution = new int[other.getSolution().length];
+        System.arraycopy(other.getSolution(), 0, solution, 0, other.getSolution().length);
+        fitness = other.getFitness();
+    }
+
+    /**
      * Generate random solution
      */
     public void initialize() {
@@ -36,7 +46,7 @@ public class Individual {
      * Calculate fitness of current solution
      * @param matrices input matrices
      */
-    public void calculateFitness(QAPMatrices matrices) {
+    public void calculateFitness(Matrices matrices) {
         fitness = 0;
         for (int i = 0; i < matrices.getSize(); i++) {
             for (int j = 0; j < matrices.getSize(); j++) {
