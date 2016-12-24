@@ -7,9 +7,9 @@ import java.util.Random;
  */
 public class Individual {
     /**
-     * QAP input matrices
+     * Current solution
      */
-    private QAPMatrices matrices;
+    private int[] solution;
 
     /**
      * Fitness of current solution
@@ -17,18 +17,12 @@ public class Individual {
     private int fitness;
 
     /**
-     * Current solution
-     */
-    private int[] solution;
-
-    /**
      * Constructor. Copy input matrices and generate random solution
-     * @param matrices input matrices
+     * @param size number of genes
      */
-    public Individual(QAPMatrices matrices) {
-        this.matrices = matrices;
+    public Individual(int size) {
+        solution = new int[size];
         fitness = 0;
-        solution = new int[matrices.getSize()];
     }
 
     /**
@@ -40,8 +34,9 @@ public class Individual {
 
     /**
      * Calculate fitness of current solution
+     * @param matrices input matrices
      */
-    public void calculateFitness() {
+    public void calculateFitness(QAPMatrices matrices) {
         fitness = 0;
         for (int i = 0; i < matrices.getSize(); i++) {
             for (int j = 0; j < matrices.getSize(); j++) {
@@ -96,7 +91,7 @@ public class Individual {
         Random r = new Random();
         for (int i = 0; i < solution.length; i++) {
             int swap = solution[i]; // value of gene i
-            int pos = r.nextInt(matrices.getSize()); // position of gene to swap
+            int pos = r.nextInt(solution.length); // position of gene to swap
             solution[i] = solution[pos];
             solution[pos] = swap;
         }

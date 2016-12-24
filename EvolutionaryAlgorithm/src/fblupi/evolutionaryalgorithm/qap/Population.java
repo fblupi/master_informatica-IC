@@ -19,13 +19,22 @@ public class Population {
 
     /**
      * Generate random population
+     * @param size number of genes
+     */
+    public void initialize(int size) {
+        for (int i = 0; i < population.length; i++) {
+            population[i] = new Individual(size);
+            population[i].initialize();
+        }
+    }
+
+    /**
+     * Calculate fitness of each individual in the population
      * @param matrices input matrices
      */
-    public void initialize(QAPMatrices matrices) {
+    public void calculateFitness(QAPMatrices matrices) {
         for (int i = 0; i < population.length; i++) {
-            population[i] = new Individual(matrices);
-            population[i].initialize();
-            population[i].calculateFitness();
+            population[i].calculateFitness(matrices);
         }
     }
 
@@ -36,7 +45,7 @@ public class Population {
     public Individual getFittest() {
         Individual fittest = population[0];
         for (int i = 1; i < population.length; i++) {
-            if (population[i].getFitness() > fittest.getFitness()) {
+            if (population[i].getFitness() < fittest.getFitness()) {
                 fittest = population[i];
             }
         }

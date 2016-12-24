@@ -11,22 +11,22 @@ public class BasicAlgorithm {
     /**
      * Mutation probability after crossover
      */
-    private final double MUTATION_PROBABILITY = 0.3;
+    private final double MUTATION_PROBABILITY = 0.2;
 
     /**
      * Number of generations
      */
-    private final int NUMBER_OF_GENERATIONS = 10000;
+    private final int NUMBER_OF_GENERATIONS = 500;
 
     /**
      * Population size
      */
-    private final int POPULATION_SIZE = 50;
+    private final int POPULATION_SIZE = 400;
 
     /**
      * Number of tournament participants
      */
-    private final int TOURNAMENT_SIZE = 16;
+    private final int TOURNAMENT_SIZE = 10;
     private Population population;
     private QAPMatrices matrices;
 
@@ -37,12 +37,15 @@ public class BasicAlgorithm {
     public BasicAlgorithm(QAPMatrices matrices) {
         this.matrices = matrices;
         population = new Population(POPULATION_SIZE);
-        population.initialize(matrices);
+        population.initialize(matrices.getSize());
+        population.calculateFitness(matrices);
     }
 
+    /**
+     * Execute the algorithm during the established number of generations
+     */
     public void execute() {
         for (int i = 0; i < NUMBER_OF_GENERATIONS; i++) {
-            System.out.println("Generation " + (i + 1) + "...");
             Population generation = new Population(POPULATION_SIZE);
             for (int j = 0; j < POPULATION_SIZE / 2; j++) {
                 // Parents to crossover
@@ -58,14 +61,15 @@ public class BasicAlgorithm {
                 mutate(children[0]);
                 mutate(children[1]);
 
-                children[0].calculateFitness();
-                children[1].calculateFitness();
+                children[0].calculateFitness(matrices);
+                children[1].calculateFitness(matrices);
 
                 // Insert children in new population
                 generation.getPopulation()[2 * j] = children[0];
                 generation.getPopulation()[2 * j + 1] = children[1];
             }
             population = generation; // Evolve into the new generation
+            System.out.println("Generation " + (i + 1) + " -> " + population.getFittest().getFitness());
         }
     }
 
@@ -97,8 +101,8 @@ public class BasicAlgorithm {
 
         // Create children
         Individual[] children  = new Individual[2];
-        children[0] = new Individual(matrices);
-        children[1] = new Individual(matrices);
+        children[0] = new Individual(matrices.getSize());
+        children[1] = new Individual(matrices.getSize());
 
         // Generating positions to cut
         int position1, position2;
