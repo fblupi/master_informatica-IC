@@ -1,5 +1,6 @@
 package fblupi.evolutionaryalgorithm.qap;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
@@ -11,22 +12,22 @@ public class EA {
     /**
      * Mutation probability after crossover
      */
-    private final double MUTATION_PROBABILITY = 0.2;
+    private final double MUTATION_PROBABILITY = 0.3;
 
     /**
      * Number of generations
      */
-    private final int NUMBER_OF_GENERATIONS = 200;
+    private final int NUMBER_OF_GENERATIONS = 100;
 
     /**
      * Population size
      */
-    private final int POPULATION_SIZE = 400;
+    private final int POPULATION_SIZE = 100;
 
     /**
      * Number of tournament participants
      */
-    private final int TOURNAMENT_SIZE = 10;
+    private final int TOURNAMENT_SIZE = 5;
 
     /**
      * Type of the evolutionary algorithm
@@ -34,21 +35,19 @@ public class EA {
     private EAType type;
 
     /**
-     * Input matrices
+     * Current population
      */
-    private Matrices matrices;
     private Population population;
 
     /**
-     * Constructor. Copy input matrices and initialize population
-     * @param matrices input matrices
+     * Constructor. Copy input matrices and generate population
+     * @param type type of evolutionary algorithm
      */
-    public EA(EAType type, Matrices matrices) {
-        this.matrices = matrices;
+    public EA(EAType type) {
         this.type = type;
         population = new Population(POPULATION_SIZE);
-        population.initialize(matrices.getSize());
-        population.calculateFitness(matrices);
+        population.generate(Matrices.getSize());
+        population.calculateImprovedFitness(type);
     }
 
     /**
@@ -71,15 +70,16 @@ public class EA {
                 mutate(children[0]);
                 mutate(children[1]);
 
-                children[0].calculateFitness(matrices);
-                children[1].calculateFitness(matrices);
-
                 // Insert children in new population
-                generation.getPopulation()[2 * j] = children[0];
-                generation.getPopulation()[2 * j + 1] = children[1];
+                generation.getPopulation()[2 * j] = new Individual(children[0]);
+                generation.getPopulation()[2 * j + 1] = new Individual(children[1]);
             }
+            generation.getPopulation()[0] = new Individual(population.getFittest()); // preserve best individual
+            generation.calculateImprovedFitness(type); // calculate improved fitness of new generation
             population = generation; // Evolve into the new generation
-            System.out.println("Generation " + (i + 1) + " -> " + getFittest().getFitness());
+            System.out.println("Generation " + (i + 1));
+            System.out.println("\tSolution: " + Arrays.toString(population.getFittest().getSolution()));
+            System.out.println("\tFitness: " + population.getFittest().getFitness());
         }
     }
 
@@ -96,9 +96,9 @@ public class EA {
             do {
                 participant = r.nextInt(POPULATION_SIZE);
             } while (participants.contains(participant));
-            tournament.getPopulation()[i] = population.getPopulation()[participant];
+            tournament.getPopulation()[i] = new Individual(population.getPopulation()[participant]);
         }
-        return tournament.getFittest(type);
+        return tournament.getFittest();
     }
 
     /**
@@ -111,14 +111,14 @@ public class EA {
 
         // Create children
         Individual[] children  = new Individual[2];
-        children[0] = new Individual(matrices.getSize());
-        children[1] = new Individual(matrices.getSize());
+        children[0] = new Individual(Matrices.getSize());
+        children[1] = new Individual(Matrices.getSize());
 
         // Generating positions to cut
         int position1, position2;
-        position1 = r.nextInt(matrices.getSize());
+        position1 = r.nextInt(Matrices.getSize());
         do {
-            position2 = r.nextInt(matrices.getSize());
+            position2 = r.nextInt(Matrices.getSize());
         } while (position1 == position2); // cannot repeat the same position
 
         // First must be lower than second
@@ -142,7 +142,7 @@ public class EA {
             individualsInChildren1.add(children[1].getSolution()[i]);
         }
 
-        for (int i = 0; i < matrices.getSize(); i++) { // iterate children
+        for (int i = 0; i < Matrices.getSize(); i++) { // iterate children
             if (i < position1 || i >= position2) { // not between the positions
                 // Search for the first value in the parent 1 which is not currently in the child 0
                 int iterator = 0;
@@ -178,9 +178,9 @@ public class EA {
         if (prob < MUTATION_PROBABILITY) {
             // Positions to mutate
             int pos1, pos2;
-            pos1 = r.nextInt(matrices.getSize());
+            pos1 = r.nextInt(Matrices.getSize());
             do {
-                pos2 = r.nextInt(matrices.getSize());
+                pos2 = r.nextInt(Matrices.getSize());
             } while (pos1 == pos2); // cannot mutate the same position
             individual.mutate(pos1, pos2); // mutate
         }
@@ -191,6 +191,6 @@ public class EA {
      * @return fittest individual
      */
     public Individual getFittest() {
-        return population.getFittest(type);
+        return population.getFittest();
     }
 }

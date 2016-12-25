@@ -9,53 +9,67 @@ import java.util.Arrays;
  */
 public class Solver {
     public static void main(String[] args) throws FileNotFoundException {
+        boolean todoStandard = false;
+        boolean todoBaldwinian = false;
+        boolean todoLamarckian = true;
+
         long iniStandard, finStandard, iniBaldwinian, finBaldwinian, iniLamarckian, finLamarckian;
 
+        EA standard, baldwinian, lamarckian;
+
         System.out.println("Reading matrices...");
-        Matrices matrices = new Matrices(new File("data/qap/tai256c.dat"));
+        Matrices.setInput(new File("data/qap/tai256c.dat"));
 
-        EA standard = new EA(EAType.STANDARD, matrices);
-        System.out.println("Executing standard algorithm...");
-        iniStandard = System.currentTimeMillis();
-        standard.execute();
-        finStandard = System.currentTimeMillis();
+        if (todoStandard) {
+            System.out.println("*****************************************************************************************");
 
-        System.out.println("*******************************************************************************");
+            System.out.println("Building standard algorithm...");
+            standard = new EA(EAType.STANDARD);
+            System.out.println("Executing standard algorithm...");
+            iniStandard = System.currentTimeMillis();
+            standard.execute();
+            finStandard = System.currentTimeMillis();
 
-        EA baldwinian = new EA(EAType.BALDWINIAN, matrices);
-        System.out.println("Executing baldwinian algorithm...");
-        iniBaldwinian = System.currentTimeMillis();
-        //baldwinian.execute();
-        finBaldwinian = System.currentTimeMillis();
+            System.out.println("*****************************************************************************************");
 
-        System.out.println("*******************************************************************************");
+            System.out.println("STANDARD");
+            System.out.println("Time: " + (finStandard - iniStandard) / 1000);
+            System.out.println("Solution: " + Arrays.toString(standard.getFittest().getSolution()));
+            System.out.println("Fitness: " + standard.getFittest().getFitness());
+        }
 
-        EA lamarckian = new EA(EAType.LAMARCKIAN, matrices);
-        System.out.println("Executing lamarckian algorithm...");
-        iniLamarckian = System.currentTimeMillis();
-        lamarckian.execute();
-        finLamarckian = System.currentTimeMillis();
+        if (todoBaldwinian) {
+            System.out.println("*****************************************************************************************");
 
-        System.out.println("*******************************************************************************");
+            System.out.println("Building baldwinian algorithm...");
+            baldwinian = new EA(EAType.BALDWINIAN);
+            System.out.println("Executing baldwinian algorithm...");
+            iniBaldwinian = System.currentTimeMillis();
+            baldwinian.execute();
+            finBaldwinian = System.currentTimeMillis();
 
-        System.out.println("STANDARD");
-        System.out.print("Time: " + (finStandard - iniStandard) / 1000);
-        System.out.println(Arrays.toString(standard.getFittest().getSolution())
-                + " -> " + standard.getFittest().getFitness());
+            System.out.println("*****************************************************************************************");
 
-        System.out.println("*******************************************************************************");
+            System.out.println("BALDWINIAN");
+            System.out.println("Time: " + (finBaldwinian - iniBaldwinian) / 1000);
+            System.out.println("Solution: " + Arrays.toString(baldwinian.getFittest().getSolution()));
+            System.out.println("Fitness: " + baldwinian.getFittest().getFitness());
+        }
 
-        System.out.println("BALDWINIAN");
-        System.out.print("Time: " + (finBaldwinian - iniBaldwinian) / 1000);
-        System.out.println(Arrays.toString(baldwinian.getFittest().getSolution())
-                + " -> " + baldwinian.getFittest().getFitness());
+        if (todoLamarckian) {
+            System.out.println("*****************************************************************************************");
 
-        System.out.println("*******************************************************************************");
+            System.out.println("Building lamarckian algorithm...");
+            lamarckian = new EA(EAType.LAMARCKIAN);
+            System.out.println("Executing lamarckian algorithm...");
+            iniLamarckian = System.currentTimeMillis();
+            lamarckian.execute();
+            finLamarckian = System.currentTimeMillis();
 
-        System.out.println("LAMARCKIAN");
-        System.out.print("Time: " + (finLamarckian - iniLamarckian) / 1000);
-        System.out.println(Arrays.toString(lamarckian.getFittest().getSolution())
-                + " -> " + lamarckian.getFittest().getFitness());
-
+            System.out.println("LAMARCKIAN");
+            System.out.println("Time: " + (finLamarckian - iniLamarckian) / 1000);
+            System.out.println("Solution: " + Arrays.toString(lamarckian.getFittest().getSolution()));
+            System.out.println("Fitness: " + lamarckian.getFittest().getFitness());
+        }
     }
 }

@@ -12,24 +12,24 @@ public class Matrices {
     /**
      * Number of installations
      */
-    private int n;
+    private static int n;
 
     /**
      * Distances between each installation
      */
-    private int[][] d;
+    private static int[][] d;
 
     /**
      * Material flow between each installation
      */
-    private int[][] w;
+    private static int[][] w;
 
     /**
-     * Constructor. Set input file with the data of the matrices
+     * et input file with the data of the matrices
      * @param file file with the data of the matrices
      * @throws FileNotFoundException
      */
-    public Matrices(File file) throws FileNotFoundException {
+    public static void setInput(File file) throws FileNotFoundException {
         Scanner scanner = new Scanner(file);
         n = scanner.nextInt();
         d = new int[n][n];
@@ -52,7 +52,7 @@ public class Matrices {
      * Get number of installations
      * @return number of installations
      */
-    public int getSize() {
+    public static int getSize() {
         return n;
     }
 
@@ -60,7 +60,7 @@ public class Matrices {
      * Get distance matrix
      * @return distance matrix
      */
-    public int[][] getDistanceMatrix() {
+    public static int[][] getDistanceMatrix() {
         return d;
     }
 
@@ -68,7 +68,7 @@ public class Matrices {
      * Get material flow matrix
      * @return material flow matrix
      */
-    public int[][] getFlowMatrix() {
+    public static int[][] getFlowMatrix() {
         return w;
     }
 }

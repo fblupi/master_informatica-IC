@@ -12,16 +12,22 @@ public class Individual {
     private int[] solution;
 
     /**
+     * Improved solution
+     */
+    private int[] improved;
+
+    /**
      * Fitness of current solution
      */
     private int fitness;
 
     /**
-     * Constructor. Copy input matrices and generate random solution
+     * Constructor
      * @param size number of genes
      */
     public Individual(int size) {
         solution = new int[size];
+        improved = null;
         fitness = 0;
     }
 
@@ -38,20 +44,44 @@ public class Individual {
     /**
      * Generate random solution
      */
-    public void initialize() {
+    public void generate() {
         generateRandomSolution();
     }
 
+
+
     /**
      * Calculate fitness of current solution
-     * @param matrices input matrices
      */
-    public void calculateFitness(Matrices matrices) {
+    public void calculateFitness() {
         fitness = 0;
-        for (int i = 0; i < matrices.getSize(); i++) {
-            for (int j = 0; j < matrices.getSize(); j++) {
-                fitness += matrices.getFlowMatrix()[i][j] * matrices.getDistanceMatrix()[solution[i]][solution[j]];
+        for (int i = 0; i < Matrices.getSize(); i++) {
+            for (int j = 0; j < Matrices.getSize(); j++) {
+                fitness += Matrices.getFlowMatrix()[i][j] * Matrices.getDistanceMatrix()[solution[i]][solution[j]];
             }
+        }
+    }
+
+    /**
+     * Calculate fitness of improved solution
+     * @param type type of evolutionary algorithm
+     */
+    public void calculateImprovedFitness(EAType type) {
+        if (type == EAType.BALDWINIAN || type == EAType.LAMARCKIAN) {
+            if (improved == null) {
+                improved = localSearch();
+                if (type == EAType.LAMARCKIAN) {
+                    solution = improved;
+                }
+            }
+            fitness = 0;
+            for (int i = 0; i < Matrices.getSize(); i++) {
+                for (int j = 0; j < Matrices.getSize(); j++) {
+                    fitness += Matrices.getFlowMatrix()[i][j] * Matrices.getDistanceMatrix()[improved[i]][improved[j]];
+                }
+            }
+        } else {
+            calculateFitness();
         }
     }
 
@@ -92,6 +122,9 @@ public class Individual {
         }
         // Shuffle it
         shuffleSolution();
+
+        // Calculate fitness
+        calculateFitness();
     }
 
     /**
@@ -105,6 +138,31 @@ public class Individual {
             solution[i] = solution[pos];
             solution[pos] = swap;
         }
+    }
+
+    /**
+     * Greedy 2-opt algorithm to optimize an individual
+     */
+    private int[] localSearch() {
+        Individual best;
+        Individual S = new Individual(this);
+        S.calculateFitness();
+        do {
+            best = new Individual(S); // save best solution by now
+            for (int i = 0; i < solution.length; i++) {
+                for (int j = i + 1; j < solution.length; j++) {
+                    // Create T exchanging i and j gene
+                    Individual T = new Individual(S);
+                    T.getSolution()[i] = S.getSolution()[j];
+                    T.getSolution()[j] = S.getSolution()[i];
+                    T.calculateFitness(); // calculate fitness of new solution
+                    if (T.getFitness() < S.getFitness()) { // if new solution is better than older updates
+                        S = new Individual(T);
+                    }
+                }
+            }
+        } while (S.getFitness() < best.getFitness());
+        return S.getSolution();
     }
 
 }
