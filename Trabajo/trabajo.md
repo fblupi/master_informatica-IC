@@ -30,13 +30,13 @@ El proceso de un sistema difuso cuenta con los siguiente pasos [2]:
 
 ## Un caso práctico. Diagnóstico de riesgo de enfermedad cardíaca
 
-[3,4]
-
-Se usa el *toolbox* de lógica difusa de MatLab para desarrollar el sistema.
+La medicina es un campo muy extenso y como se ha mencionado anteiormente el número de publicaciones que hacen uso de la lógica difusa para realizar un diagnóstico médico es enorme. De entre todas las posibilidades que he encontrado y decidido profundizar en un caso que se repite en dos publicaciones [3,4] ya que tengo la posibilidad de reproducirlo usando el *toolbox* de *Fuzzy Logic Designer* de MatLab para aprovechar y poder experimentar de forma práctica con la lógica difusa.
 
 ### Fuzzificar
 
 #### Entradas
+
+Son todos los parámetros de entrada de un paciente que se *fuzzifican* como se determina a continuación:
 
 ##### Presión arterial sistólica
 
@@ -44,9 +44,7 @@ Valor máximo de presión arterial cuando el corazón se contrae (sístole). Se 
 
 La dividimos en cuatro valores difusos:
 
-IMAGEN
-
-ECUACIÓN
+!["Presión arterial sistólica fuzzy"](img/blood-pressure.png)
 
 ##### Colesterol LDL
 
@@ -54,23 +52,19 @@ Una mayor cantidad de colesterol LDL (*low-density lipoprotein*) se traduce en m
 
 Lo dividimos en cuatro valores difusos:
 
-IMAGEN
-
-ECUACIÓN
+!["Colesterol fuzzy"](img/cholesterol.png)
 
 ##### Electrocardiograma (ECG)
 
 El ECG es la representación de la actividad eléctrica del corazón. Se obtiene con ultrasonido usando un electrocardiógrafo.
 
-IMAGEN
+!["ECG"](img/ecg.png)
 
 En nuestro caso se mide en segundos la duración del segmento ST y la onda T.
 
 Lo dividimos en tres valores difusos:
 
-IMAGEN
-
-ECUACIÓN
+!["Electrocardiograma fuzzy"](img/electrocardiography.png)
 
 ##### Frecuencia cardíaca
 
@@ -78,9 +72,7 @@ La frecuencia cardíaca es cuántas veces late el corazón por minuto. Se ha de 
 
 Lo dividimos en tres valores difusos:
 
-IMAGEN
-
-ECUACIÓN
+!["Frecuencia cardiaca fuzzy"](img/heart-rate.png)
 
 ##### Glucosa en sangre
 
@@ -88,9 +80,7 @@ Una persona con más de 120 mg/dl de glucosa en sangre es diabética lo que aume
 
 Vamos a usar un único valor difuso:
 
-IMAGEN
-
-ECUACIÓN
+!["Glucosa en sangre fuzzy"](img/blood-sugar.png)
 
 ##### Depresión del segmento ST
 
@@ -98,9 +88,7 @@ Medir la depresión del segmento ST durante el ejercicio puede ayudar a pronosti
 
 Se usarán tres variables difusas:
 
-IMAGEN
-
-ECUACIÓN
+!["Depresión del segmento ST fuzzy"](img/old-peak.png)
 
 ##### Escáner con talio
 
@@ -108,9 +96,7 @@ Con el escáner con talio se puede ver si zonas del corazón no reciben suficien
 
 Se utilizarán tres valores difusos:
 
-IMAGEN
-
-ECUACIÓN
+!["Escáner con talio fuzzy"](img/thalium.png)
 
 ##### Edad
 
@@ -118,7 +104,7 @@ A más años tenga un individuo, mayor es la probabilidad de que sufra un ataque
 
 Se usarán cuatro variables difusas:
 
-IMAGEN
+!["Edad fuzzy"](img/age.png)
 
 #### Salida
 
@@ -126,7 +112,7 @@ El sistema proveerá una única salida con el porcentaje de riesgo de ataque.
 
 Para ello se usarán cinco variables difusas:
 
-IMAGEN
+!["Riesgo fuzzy"](img/risk.png)
 
 ## Referencias
 
