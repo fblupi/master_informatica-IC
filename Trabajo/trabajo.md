@@ -34,11 +34,11 @@ La medicina es un campo muy extenso y como se ha mencionado anteiormente el núm
 
 Se ha usado un *dataset* basado en los datos obtenidos en el V. A. Medical Center en Long Beach y la Cleveland Clinic Foundation y clasificados por la Universidad de California.
 
-El propósito de este dataset es diagnosticar la presencia o ausencia de riesgo de enfermedad cardiaca que pueda tener un paciente. Originalmente el *dataset* contaba con 76 atributos y 303 pacientes, pero para desarrollar este sistema difuso se han utilizado tan solo los nueve más significativos (8 de entrada y 1 de salida).
+El propósito de este dataset es diagnosticar la presencia o ausencia de riesgo de enfermedad cardiaca que pueda tener un paciente. Originalmente el *dataset* contaba con 76 variables y 303 pacientes, pero para desarrollar este sistema difuso se han utilizado tan solo las nueve más significativas (8 de entrada y 1 de salida).
 
-Los atributos de entrada son:
+Las variables de entrada son:
 
-| Atributo                  | Unidad de medida |
+| Variable                  | Unidad de medida |
 | ------------------------- | ---------------- |
 | Presión arterial          | mmHg             |
 | Colesterol LDL            | mg/dl            |
@@ -52,6 +52,8 @@ Los atributos de entrada son:
 Y el de salida indica el porcentaje de riesgo de enfermedad cardiaca del individuo.
 
 ### Fuzzificar
+
+El primer paso de todos es definir las *membership function* de cada variable para convertirlas en números difusos.
 
 #### Entradas
 
@@ -132,6 +134,36 @@ El sistema proveerá una única salida con el porcentaje de riesgo de ataque.
 Para ello se usarán cinco variables difusas:
 
 !["Riesgo fuzzy"](img/risk.png)
+
+### Mecanismo de inferencia
+
+Se utiliza el método de Mamdani como mecanismo de inferencia difuso ya que es el que proporciona MatLab. Este método tiene una estructurabastante simple con operaciones *min-max*:
+
+* *OR*: max
+* *AND*: min
+* Agregación: max
+* Implicación: min
+
+!["Esquema aplicación"](img/system.png)
+
+#### Reglas
+
+Este mecanismo se basa en la definición de reglas de relaciones difusas. Por ejemplo: "Si la presión sanguínea es muy alta el riesgo es muy alto". A cada una de las reglas se le aplica un peso que determina el grado de validez de ésta.
+
+Las reglas han sido creadas teniendo en cuenta tanto los resultados del *dataset* como por las opiniones de expertos.
+
+### Defuzzificar
+
+Para obtener un resultado en forma de porcentaje y no en forma de variable difusa hay que defuzzificar, para ello, se utiliza el método de centroide. Es un método muy simple que calcula el centro del área obtenida tras aplicar las reglas a los datos de entrada.
+
+### Ejemplos de salidas
+
+| Presión | Colesterol | Glucosa | ECG | Frec. cardiaca | Depr. ST | Talio | Edad | Riesgo |
+| --  | --  | --  | --  | --  | --  | --  | --  | --  |
+| a | b | c | d | e | f | g | h | i |
+| a | b | c | d | e | f | g | h | i |
+| a | b | c | d | e | f | g | h | i |
+| a | b | c | d | e | f | g | h | i |
 
 ## Referencias
 
