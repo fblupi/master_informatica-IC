@@ -32,6 +32,25 @@ El proceso de un sistema difuso cuenta con los siguiente pasos [2]:
 
 La medicina es un campo muy extenso y como se ha mencionado anteiormente el número de publicaciones que hacen uso de la lógica difusa para realizar un diagnóstico médico es enorme. De entre todas las posibilidades que he encontrado y decidido profundizar en un caso que se repite en dos publicaciones [3,4] ya que tengo la posibilidad de reproducirlo usando el *toolbox* de *Fuzzy Logic Designer* de MatLab para aprovechar y poder experimentar de forma práctica con la lógica difusa.
 
+Se ha usado un *dataset* basado en los datos obtenidos en el V. A. Medical Center en Long Beach y la Cleveland Clinic Foundation y clasificados por la Universidad de California.
+
+El propósito de este dataset es diagnosticar la presencia o ausencia de riesgo de enfermedad cardiaca que pueda tener un paciente. Originalmente el *dataset* contaba con 76 atributos y 303 pacientes, pero para desarrollar este sistema difuso se han utilizado tan solo los nueve más significativos (8 de entrada y 1 de salida).
+
+Los atributos de entrada son:
+
+| Atributo                  | Unidad de medida |
+| ------------------------- | ---------------- |
+| Presión arterial          | mmHg             |
+| Colesterol LDL            | mg/dl            |
+| ECG                       | s                |
+| Frecuencia cardiaca       | latidos/m        |
+| Glucosa en sangre         | mg/dl            |
+| Depresión del segmento ST | mV               |
+| Escáner con talio         | -                |
+| Edad                      | años             |
+
+Y el de salida indica el porcentaje de riesgo de enfermedad cardiaca del individuo.
+
 ### Fuzzificar
 
 #### Entradas
@@ -84,7 +103,7 @@ Vamos a usar un único valor difuso:
 
 ##### Depresión del segmento ST
 
-Medir la depresión del segmento ST durante el ejercicio puede ayudar a pronosticar una enfermedad del corazón. A mayor sea este, más posibilidades de sufrir un ataque al corazón.
+Medir la depresión del segmento ST durante el ejercicio puede ayudar a pronosticar una enfermedad del corazón. A mayor sea este, más posibilidades de sufrir un ataque al corazón. Se mide en mili voltios (mV).
 
 Se usarán tres variables difusas:
 
