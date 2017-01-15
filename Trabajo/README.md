@@ -148,6 +148,8 @@ Este mecanismo se basa en la definición de reglas de relaciones difusas. Por ej
 
 Las reglas han sido creadas teniendo en cuenta tanto los resultados del *dataset* como por las opiniones de expertos.
 
+Se han llegado a crear más de 1.000 reglas.
+
 ### Defuzzificar
 
 Para obtener un resultado en forma de porcentaje y no en forma de variable difusa hay que defuzzificar, para ello, se utiliza el método de centroide. Es un método muy simple que calcula el centro del área obtenida tras aplicar las reglas a los datos de entrada.
@@ -183,7 +185,11 @@ Como el propio *dataset* con el que se ha construido el sistema difuso no ha sid
 
 ## Conclusiones
 
-Lalala
+El sistema ha sido probado por expertos en medicina y llega a simular a un médico pues coincide en un 94% con los resultados obtenidos por este. La principal ventaja es que teniendo los datos de entrada, no hace falta consultar a un experto y el propio usuario puede conocer el riesgo que tiene de sufrir un ataque cardiaco.
+
+Así como este sistema se ha creado específicamente para problemas de corazón, se podrían crear otros para cualquier otro tipo de enfermedad.
+
+Y es que la aplicación de la lógica difusa en la medicina, como ya se comentó en la introducción, es enorme y se podría aplicar también a discernir entre varias enfermedades dados unos síntomas.
 
 ## Referencias
 
