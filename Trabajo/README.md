@@ -73,6 +73,8 @@ La dividimos en cuatro valores difusos:
 
 !["Presión arterial sistólica fuzzy"](img/blood-pressure.png)
 
+!["Presión arterial sistólica función"](img/blood-pressure-function.png)
+
 ##### Colesterol LDL
 
 Uno de los mayores riesgos de sufrir un ataque al corazón es la presencia de un alto nivel de colesterol LDL (*low-density lipoprotein*) en sangre. Ya que bloquea las paredes arteriales impidiendo la circulación de la sangre.
@@ -85,6 +87,8 @@ Lo dividimos en cuatro valores difusos:
 
 !["Colesterol fuzzy"](img/cholesterol.png)
 
+!["Colesterol función"](img/cholesterol-function.png)
+
 ##### Frecuencia cardíaca
 
 La frecuencia cardíaca es cuántas veces late el corazón por minuto. La media en reposo se encuentra entre 60 y 100 latidos por minuto. Cuando se realiza ejercicio incrementan los latidos linealmente y determinan la forma cardiorespiratoria de una persona.
@@ -92,6 +96,8 @@ La frecuencia cardíaca es cuántas veces late el corazón por minuto. La media 
 Lo dividimos en tres valores difusos:
 
 !["Frecuencia cardiaca fuzzy"](img/heart-rate.png)
+
+!["Frecuencia cardiaca función"](img/heart-rate-function.png)
 
 ##### Depresión del segmento ST
 
@@ -105,6 +111,8 @@ Se usarán tres variables difusas:
 
 !["Depresión del segmento ST fuzzy"](img/old-peak.png)
 
+!["Depresión del segmento ST función"](img/old-peak-function.png)
+
 ##### Edad
 
 A más años tenga un individuo, mayor es la probabilidad de que sufra un ataque cardíaco.
@@ -112,6 +120,8 @@ A más años tenga un individuo, mayor es la probabilidad de que sufra un ataque
 Se usarán cuatro variables difusas:
 
 !["Edad fuzzy"](img/age.png)
+
+!["Edad fuzzy"](img/age-function.png)
 
 #### Salida
 
@@ -146,7 +156,7 @@ Para obtener un resultado en forma de porcentaje y no en forma de variable difus
 
 ### Ejemplos de salidas
 
-Ya que los datos utilizados para la creación de este sistema difuso no han sido publicados, no he podido comprobar el éxito de este con datos reales. No obstante lo he probado con datos
+Como el propio *dataset* con el que se ha construido el sistema difuso no ha sido liberado, no puedo ver cuánto se asemeja a la realidad. Pero si se puede cambiar con un modelo matemático también usado para calcular este porcentaje basado en una función en la que se multiplica cada entrada por un factor dependiendo de su peso para obtener el resultado:
 
 | Edad | Presión | Colesterol | Frecuencia cardiaca | Depresión segmento ST | Riesgo (fuzzy) | Riesgo (matemático) |
 | ---- | ------- | ---------- | ------------------- | --------------------- | -------------- | ------------------- |
@@ -173,7 +183,7 @@ Ya que los datos utilizados para la creación de este sistema difuso no han sido
 
 ## Conclusiones
 
-Lala
+Lalala
 
 ## Referencias
 
