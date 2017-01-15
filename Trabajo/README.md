@@ -6,6 +6,8 @@
 
 En la medicina los médicos usan a veces variables precisas como pueden ser el peso, la altura, la frecuencia cardiaca en reposo, pero en la mayoría de las ocasiones usa otras con más vaguedad como puede ser el grado de dolor de cabeza que sufre el paciente, el ejercicio que realiza diariamente e incluso algunas de las variables precisas mencionadas anteriormente como la frecuencia cardiaca o la edad. Porque un individuo con 30 años ¿es una persona joven o empieza a ser considerado mayor?
 
+Además un médico basa sus diagnósticos en su experiencia y percepción como experto en el tema.
+
 Es por esto que la aplicación de la lógica difusa en este campo ha tenido bastante importancia que se ve reflejada en el número de papers que se publican sobre esto [1]:
 
 | Año  | Publicaciones |
@@ -22,6 +24,8 @@ Es por esto que la aplicación de la lógica difusa en este campo ha tenido bast
 | 2009 | 312           |
 | 2010 | 306           |
 
+Este éxito se debe a que a que la lógica difusa lidia tanto con incertidumbre como con la vaguedad.
+
 ## Proceso
 
 El proceso de un sistema difuso cuenta con los siguiente pasos [2]:
@@ -30,7 +34,11 @@ El proceso de un sistema difuso cuenta con los siguiente pasos [2]:
 
 ## Un caso práctico. Diagnóstico de riesgo de enfermedad cardíaca
 
-La medicina es un campo muy extenso y como se ha mencionado anteiormente el número de publicaciones que hacen uso de la lógica difusa para realizar un diagnóstico médico es enorme. De entre todas las posibilidades que he encontrado y decidido profundizar en un caso que se repite en dos publicaciones [3,4] ya que tengo la posibilidad de reproducirlo usando el *toolbox* de *Fuzzy Logic Designer* de MatLab para aprovechar y poder experimentar de forma práctica con la lógica difusa.
+La medicina es un campo muy extenso y como se ha mencionado anteriormente el número de publicaciones que hacen uso de la lógica difusa para realizar un diagnóstico médico es enorme. De entre todas las posibilidades que he encontrado y decidido profundizar en un caso que se repite en dos publicaciones [3,4] ya que tengo la posibilidad de reproducirlo usando el *toolbox* de *Fuzzy Logic Designer* de MatLab para aprovechar y poder experimentar de forma práctica con la lógica difusa.
+
+El sistema difuso experto (fuzzy expert system, FES) desarrollado consta de una interfaz de usuario con la que el usuario (administrador, médico o paciente) interactúa para introducir datos de síntomas que se incluyen en una base de datos. Esta base de datos se *fuzzifica* para entrar en la base de conocimiento difuso donde se puede consultar posteriormente un resultado usando los datos de la base de conocomiento como datos de entrada en un sistema de inferencia que luego pasa a defuzzificarse para mostrar el resultado al usuario de forma legible.
+
+!["FES"](img/fes.png)
 
 Se ha usado un *dataset* basado en los datos obtenidos en el V. A. Medical Center en Long Beach y la Cleveland Clinic Foundation y clasificados por la Universidad de California.
 
@@ -54,7 +62,7 @@ El objetivo es poder diagnosticar el riesgo de una persona de que sufra una enfe
 
 El primer paso de todos es definir las *membership function* de cada variable para convertirlas en números difusos. Tenemos que convertir los valores obtenidos a objetos que se encuentran en uno o varios conjuntos con un grado de pertenencia. Por ejemplo:
 
-* 170 mmHG es una presión media con grado 0,13 y alta con grado 0,94.
+* 170 mmHg es una presión media con grado 0,13 y alta con grado 0,94.
 * 192 mg/dl de colesterol en sangre es un nivel bajo con grado 0,11 y medio con grado 0,07.
 
 Para obtener estos grados de pertenencia se utilizarán las funciones de membresía que se explicarán posteriormente.
@@ -185,7 +193,7 @@ Como el propio *dataset* con el que se ha construido el sistema difuso no ha sid
 
 ## Conclusiones
 
-El sistema ha sido probado por expertos en medicina y llega a simular a un médico pues coincide en un 94% con los resultados obtenidos por este. La principal ventaja es que teniendo los datos de entrada, no hace falta consultar a un experto y el propio usuario puede conocer el riesgo que tiene de sufrir un ataque cardiaco.
+El sistema ha sido probado por expertos en medicina y llega a simular a un médico pues coincide en un 94% con los resultados obtenidos por este. La principal ventaja es que teniendo los datos de entrada, no hace falta consultar a un experto y el propio usuario puede conocer el riesgo que tiene de sufrir un ataque cardiaco. También puede servir de soporte para un médico con poca experiencia para realizar sus primeros diagnósticos con éxito.
 
 Así como este sistema se ha creado específicamente para problemas de corazón, se podrían crear otros para cualquier otro tipo de enfermedad.
 
