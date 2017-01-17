@@ -44,9 +44,9 @@ La medicina es un campo muy extenso y como se ha mencionado anteriormente el nú
 
 De entre todas las posibilidades que he encontrado y decidido profundizar en un caso que se repite en varias publicaciones [3,4,5] ya que, además que puedo probar a implementarlo por mi mismo utilizando el *Fuzzy Logic Designer* de MatLab, es la mayor causa de muerte en el mundo en el año 2012 según la OMS.
 
-Saber si una persona va a sufrir o no un ataque al corazón no es algo sencillo ya que hay que tener en cuenta un grandísimo número de variables y; aunque algunas son muy conocidas como el colesterol o las irregularidades en el pulso cardíaco; el 50% de las personas que sufieron por primera vez un infarto no presentaron ninguno de estos síntomas anteriormente [5].
+Saber si una persona va a sufrir o no un ataque al corazón no es algo sencillo ya que hay que tener en cuenta un grandísimo número de variables y; aunque algunas son muy conocidas como el colesterol o las irregularidades en el pulso cardíaco; el 50% de las personas que sufrieron por primera vez un infarto no presentaron ninguno de estos síntomas anteriormente [5].
 
-El sistema difuso experto (*fuzzy expert system*, FES) desarrollado consta de una interfaz de usuario con la que el usuario (administrador, médico o paciente) interactúa para introducir datos de síntomas que se incluyen en una base de datos. Esta base de datos se *fuzzifica* para entrar en la base de conocimiento difuso donde se puede consultar posteriormente un resultado usando los datos de la base de conocomiento como datos de entrada en un sistema de inferencia que luego pasa a defuzzificarse para mostrar el resultado al usuario de forma legible.
+El sistema difuso experto (*fuzzy expert system*, FES) desarrollado consta de una interfaz de usuario con la que el usuario (administrador, médico o paciente) interactúa para introducir datos de síntomas que se incluyen en una base de datos. Esta base de datos se *fuzzifica* para entrar en la base de conocimiento difuso donde se puede consultar posteriormente un resultado usando los datos de la base de conocimiento como datos de entrada en un sistema de inferencia que luego pasa a defuzzificarse para mostrar el resultado al usuario de forma legible.
 
 !["FES"](img/fes.png)
 
@@ -66,14 +66,14 @@ Las variables de entrada son:
 
 Y el de salida indica el porcentaje de riesgo de enfermedad cardíaca del individuo.
 
-El objetivo es poder diagnosticar el riesgo de una persona de que sufra una enfermedad cardíaca a corto-medio plazo usando variables que tienen bastante influencia. Porque no es algo que se pueda determinar con precisión teniendo solo en cuenta el colesterol la presión arterial o la frecuencia cardíaca media.
+El objetivo es poder diagnosticar el riesgo de una persona de que sufra una enfermedad cardíaca a corto-medio plazo usando variables que tienen bastante influencia. Porque no es algo que se pueda determinar con precisión teniendo solo en cuenta el colesterol, la presión arterial o la frecuencia cardíaca media.
 
 ### Fuzzificar
 
 El primer paso de todos es definir las *membership function* de cada variable para convertirlas en números difusos. Tenemos que convertir los valores obtenidos a objetos que se encuentran en uno o varios conjuntos con un grado de pertenencia. Por ejemplo:
 
-* 170 mmHg es una presión media con grado 0,13 y alta con grado 0,94.
-* 192 mg/dl de colesterol en sangre es un nivel bajo con grado 0,11 y medio con grado 0,07.
+* 170 mmHg es una presión media con grado 0.13 y alta con grado 0.94.
+* 192 mg/dl de colesterol en sangre es un nivel bajo con grado 0.11 y medio con grado 0.07.
 
 Para obtener estos grados de pertenencia se utilizarán las funciones de membresía que se explicarán posteriormente.
 
@@ -85,9 +85,9 @@ Son todos los parámetros de entrada de un paciente que se *fuzzifican* como se 
 
 Cuando el corazón late se producen dos movimientos. La sístole, cuando se contrae, y la diástole, cuando se dilata.
 
-A la hora de medir la presión arterial con un tensiómetro obtenemos dos valores, comunmente llamados alto y bajo. El alto es el que usaremos y es el valor máximo de presión arterial cuando el corazón realiza la sístole. Se mide en milímetros de mercurio (mmHg).
+A la hora de medir la presión arterial con un tensiómetro obtenemos dos valores, comúnmente llamados alto y bajo. El alto es el que usaremos y es el valor máximo de presión arterial cuando el corazón realiza la sístole. Se mide en milímetros de mercurio (mmHg).
 
-La dividimos en cuatro valores difusos:
+La dividimos en cuatro conjuntos difusos (dos trapezoidales y dos triangulares):
 
 !["Presión arterial sistólica fuzzy"](img/blood-pressure.png)
 
@@ -101,7 +101,7 @@ Uno de los mayores riesgos de sufrir un ataque al corazón es la presencia de un
 
 Una mayor cantidad de colesterol LDL se traduce en mayor riesgo de sufrir un ataque al corazón. Se mide en miligramos por decilitro de sangre (mg/dl).
 
-Lo dividimos en cuatro valores difusos:
+Lo dividimos en cuatro valores difusos (dos trapezoidales y dos triangulares):
 
 !["Colesterol fuzzy"](img/cholesterol.png)
 
@@ -109,9 +109,9 @@ Lo dividimos en cuatro valores difusos:
 
 ##### Frecuencia cardíaca
 
-La frecuencia cardíaca es cuántas veces late el corazón por minuto. La media en reposo se encuentra entre 60 y 100 latidos por minuto. Cuando se realiza ejercicio incrementan los latidos linealmente y determinan la forma cardiorespiratoria de una persona.
+La frecuencia cardíaca es cuántas veces late el corazón por minuto. La media en reposo se encuentra entre 60 y 100 latidos por minuto. Cuando se realiza ejercicio incrementan los latidos linealmente y determinan la forma cardiorrespiratoria de una persona.
 
-Lo dividimos en tres valores difusos:
+Lo dividimos en tres conjuntos difusos (dos trapezoidales y uno triangular):
 
 !["Frecuencia cardíaca fuzzy"](img/heart-rate.png)
 
@@ -123,9 +123,9 @@ El electrocardiograma (ECG) es la representación de la actividad eléctrica del
 
 !["ECG"](img/ecg.png)
 
-Medir la depresión del segmento ST durante el ejercicio puede ayudar a pronosticar una enfermedad del corazón. A mayor sea este, más posibilidades de sufrir un ataque al corazón. Se mide en mili voltios (mV).
+Medir la depresión del segmento ST durante el ejercicio puede ayudar a pronosticar una enfermedad del corazón. A mayor sea este, más posibilidades de sufrir un ataque al corazón. Se mide en milivoltios (mV).
 
-Se usarán tres variables difusas:
+Se usarán tres conjuntos difusos (dos trapezoidales y uno triangular):
 
 !["Depresión del segmento ST fuzzy"](img/old-peak.png)
 
@@ -135,7 +135,7 @@ Se usarán tres variables difusas:
 
 A más años tenga un individuo, mayor es la probabilidad de que sufra un ataque cardíaco.
 
-Se usarán cuatro variables difusas:
+Se usarán cuatro variables difusas (dos trapezoidales y dos triangulares):
 
 !["Edad fuzzy"](img/age.png)
 
@@ -145,7 +145,7 @@ Se usarán cuatro variables difusas:
 
 El sistema proveerá una única salida con el porcentaje de riesgo de ataque.
 
-Para ello se usarán cinco variables difusas:
+Para ello se usarán cinco conjuntos difusos triangulares:
 
 !["Riesgo fuzzy"](img/risk.png)
 
@@ -164,9 +164,13 @@ Se utiliza el método de Mamdani como mecanismo de inferencia difuso ya que es e
 
 Este mecanismo se basa en la definición de reglas de relaciones difusas. Por ejemplo: "Si la presión sanguínea es muy alta el riesgo es muy alto". A cada una de las reglas se le aplica un peso que determina el grado de validez de ésta.
 
-Las reglas han sido creadas teniendo en cuenta tanto los resultados del *dataset* como por las opiniones de expertos.
+Las reglas han sido creadas teniendo en cuenta tanto los resultados del *dataset* como por las opiniones de expertos llegándose a crear más de 1.000 reglas.
 
-Se han llegado a crear más de 1.000 reglas.
+Estas reglas no han sido publicadas en su totalidad por lo que la simulación que he realizado personalmente usando MatLab incluye unas pocas reglas que he creado yo:
+
+!["Reglas"](img/rules.png)
+
+Aquí se puede ver el funcionamiento del sistema. En primer lugar se definen los alfa cortes en el conjunto difuso usando cada una de las funciones de membresía y los datos de entrada. Para las reglas en las que tengan influencia estas áreas generadas se traslada al área de salida de esa regla teniendo en cuenta el peso de ésta. Finalmente se realiza una agregación de las áreas generadas por todas las reglas para obtener el resultado difuso.
 
 ### Defuzzificar
 
@@ -174,7 +178,7 @@ Para obtener un resultado en forma de porcentaje y no en forma de variable difus
 
 !["Métodos para defuzzificar"](img/defuzzification-schemes.png)
 
-### Ejemplos de salidas
+### Ejemplos
 
 Como el propio *dataset* con el que se ha construido el sistema difuso no ha sido liberado, no puedo ver cuánto se asemeja a la realidad. Pero si se puede comparar con un modelo matemático también usado para calcular este porcentaje basado en una función en la que se multiplica cada entrada por un factor dependiendo de su peso para obtener el resultado:
 
