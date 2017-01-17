@@ -2,13 +2,19 @@
 
 > Francisco Javier Bolívar Lupiáñez
 
+## Resumen
+
+Desde el artículo de Zadeh en 1965, la lógica difusa ha sido aplicada en muchos campos. Uno de ellos ha sido la medicina que ha encontrado en la lógica difusa un método con el que poder expresar de una forma más realista el lenguaje lleno de vaguedad que usan los expertos. Dentro del propio campo de lógica difusa aplicada al diagnóstico médico hay muchas más aplicaciones. En este trabajo se tratará el de las enfermedades cardiovasculares. Ya que estas son la principal causa de muerte en el mundo según el último informe de la Organización Mundial de la Salud (OMS) sobre las causas principales de muerte en el año 2012. Y es que 3 de cada 10 muertes en este año fueron atribuidas a esta causa. Si además nos trasladamos a países desarrollados donde otras enfermedades que afectan enormemente a los países del tercer mundo han sido erradicadas, el porcentaje de muertes causadas por infartos es todavía más alto. Se describirá un sistema experto que ha sido utilizado en varias ocasiones basado en la implementación de un sistema en el *Fuzzy Logic Designer* de MatLab. Diseñado utilizando los datos recogidos por el V. A. Medical Center en Long Beach y la Cleveland Clinic Foundation.
+
+**Palabras clave:** lógica difusa, enfermedades cardiovasculares.
+
 ## Introducción
 
-En la medicina los médicos usan a veces variables precisas como pueden ser el peso, la altura, la frecuencia cardiaca en reposo, pero en la mayoría de las ocasiones usa otras con más vaguedad como puede ser el grado de dolor de cabeza que sufre el paciente, el ejercicio que realiza diariamente e incluso algunas de las variables precisas mencionadas anteriormente como la frecuencia cardiaca o la edad. Porque un individuo con 30 años ¿es una persona joven o empieza a ser considerado mayor?
+En la medicina los especialista usan a veces variables precisas como pueden ser el peso (kilogramos, libras...), la altura (centímetros, pies...), la frecuencia cardíaca en reposo (pulsaciones por minuto), pero en la mayoría de las ocasiones usa otras con más vaguedad como puede ser el grado de dolor de cabeza que sufre el paciente (bajo, medio, alto...), el ejercicio que realiza diariamente (poco, normal, mucho...) e incluso algunas de las variables precisas mencionadas anteriormente como la frecuencia cardíaca o la edad. Porque un individuo con 30 años ¿es una persona joven o empieza a ser considerado mayor?
 
-Además un médico basa sus diagnósticos en su experiencia y percepción como experto en el tema.
+Además un médico basa la mayoría de sus diagnósticos en su experiencia y percepción como experto en el tema, no realizando unas cuentas complicadas según unos datos de entrada con una alta precisión.
 
-Es por esto que la aplicación de la lógica difusa en este campo ha tenido bastante importancia que se ve reflejada en el número de papers que se publican sobre esto [1]:
+Es por esto que la aplicación de la lógica difusa en este campo ha tenido bastante importancia, que se ve reflejada en el número de papers que se publican sobre esto por año [1]:
 
 | Año  | Publicaciones |
 | ---- | ------------- |
@@ -24,7 +30,7 @@ Es por esto que la aplicación de la lógica difusa en este campo ha tenido bast
 | 2009 | 312           |
 | 2010 | 306           |
 
-Este éxito se debe a que a que la lógica difusa lidia tanto con incertidumbre como con la vaguedad.
+Este éxito se debe a que a que la lógica difusa lidia tanto con incertidumbre como con la vaguedad presentes en cualquier clínica cuando se está realizando un diagnóstico.
 
 ## Proceso
 
@@ -32,17 +38,21 @@ El proceso de un sistema difuso cuenta con los siguiente pasos [2]:
 
 !["Pasos"](img/fuzzy-process-steps.png)
 
-## Un caso práctico. Diagnóstico de riesgo de enfermedad cardíaca
+## Diagnóstico de riesgo de enfermedad cardíaca
 
-La medicina es un campo muy extenso y como se ha mencionado anteriormente el número de publicaciones que hacen uso de la lógica difusa para realizar un diagnóstico médico es enorme. De entre todas las posibilidades que he encontrado y decidido profundizar en un caso que se repite en dos publicaciones [3,4] ya que tengo la posibilidad de reproducirlo usando el *toolbox* de *Fuzzy Logic Designer* de MatLab para aprovechar y poder experimentar de forma práctica con la lógica difusa.
+La medicina es un campo muy extenso y como se ha mencionado anteriormente el número de publicaciones que hacen uso de la lógica difusa para realizar un diagnóstico médico es enorme.
 
-El sistema difuso experto (fuzzy expert system, FES) desarrollado consta de una interfaz de usuario con la que el usuario (administrador, médico o paciente) interactúa para introducir datos de síntomas que se incluyen en una base de datos. Esta base de datos se *fuzzifica* para entrar en la base de conocimiento difuso donde se puede consultar posteriormente un resultado usando los datos de la base de conocomiento como datos de entrada en un sistema de inferencia que luego pasa a defuzzificarse para mostrar el resultado al usuario de forma legible.
+De entre todas las posibilidades que he encontrado y decidido profundizar en un caso que se repite en varias publicaciones [3,4,5] ya que, además que puedo probar a implementarlo por mi mismo utilizando el *Fuzzy Logic Designer* de MatLab, es la mayor causa de muerte en el mundo en el año 2012 según la OMS.
+
+Saber si una persona va a sufrir o no un ataque al corazón no es algo sencillo ya que hay que tener en cuenta un grandísimo número de variables y; aunque algunas son muy conocidas como el colesterol o las irregularidades en el pulso cardíaco; el 50% de las personas que sufieron por primera vez un infarto no presentaron ninguno de estos síntomas anteriormente [5].
+
+El sistema difuso experto (*fuzzy expert system*, FES) desarrollado consta de una interfaz de usuario con la que el usuario (administrador, médico o paciente) interactúa para introducir datos de síntomas que se incluyen en una base de datos. Esta base de datos se *fuzzifica* para entrar en la base de conocimiento difuso donde se puede consultar posteriormente un resultado usando los datos de la base de conocomiento como datos de entrada en un sistema de inferencia que luego pasa a defuzzificarse para mostrar el resultado al usuario de forma legible.
 
 !["FES"](img/fes.png)
 
 Se ha usado un *dataset* basado en los datos obtenidos en el V. A. Medical Center en Long Beach y la Cleveland Clinic Foundation y clasificados por la Universidad de California.
 
-El propósito de este dataset es diagnosticar la presencia o ausencia de riesgo de enfermedad cardiaca que pueda tener un paciente. Originalmente el *dataset* contaba con 76 variables y 303 pacientes, pero para desarrollar este sistema difuso se han utilizado tan solo las seis más significativas (5 de entrada y 1 de salida).
+El propósito de este dataset es diagnosticar la presencia o ausencia de riesgo de enfermedad cardíaca que pueda tener un paciente. Originalmente el *dataset* contaba con 76 variables y 303 pacientes, pero para desarrollar este sistema difuso se han utilizado tan solo las seis más significativas (5 de entrada y 1 de salida).
 
 Las variables de entrada son:
 
@@ -50,13 +60,13 @@ Las variables de entrada son:
 | ------------------------- | ---------------- |
 | Presión arterial          | mmHg             |
 | Colesterol LDL            | mg/dl            |
-| Frecuencia cardiaca       | latidos/m        |
+| Frecuencia cardíaca       | latidos/m        |
 | Depresión del segmento ST | mV               |
 | Edad                      | años             |
 
-Y el de salida indica el porcentaje de riesgo de enfermedad cardiaca del individuo.
+Y el de salida indica el porcentaje de riesgo de enfermedad cardíaca del individuo.
 
-El objetivo es poder diagnosticar el riesgo de una persona de que sufra una enfermedad cardiaca a corto-medio plazo usando variables que tienen bastante influencia. Porque no es algo que se pueda determinar con precisión teniendo solo en cuenta el colesterol la presión arterial o la frecuencia cardiaca media.
+El objetivo es poder diagnosticar el riesgo de una persona de que sufra una enfermedad cardíaca a corto-medio plazo usando variables que tienen bastante influencia. Porque no es algo que se pueda determinar con precisión teniendo solo en cuenta el colesterol la presión arterial o la frecuencia cardíaca media.
 
 ### Fuzzificar
 
@@ -103,9 +113,9 @@ La frecuencia cardíaca es cuántas veces late el corazón por minuto. La media 
 
 Lo dividimos en tres valores difusos:
 
-!["Frecuencia cardiaca fuzzy"](img/heart-rate.png)
+!["Frecuencia cardíaca fuzzy"](img/heart-rate.png)
 
-!["Frecuencia cardiaca función"](img/heart-rate-function.png)
+!["Frecuencia cardíaca función"](img/heart-rate-function.png)
 
 ##### Depresión del segmento ST
 
@@ -168,7 +178,7 @@ Para obtener un resultado en forma de porcentaje y no en forma de variable difus
 
 Como el propio *dataset* con el que se ha construido el sistema difuso no ha sido liberado, no puedo ver cuánto se asemeja a la realidad. Pero si se puede cambiar con un modelo matemático también usado para calcular este porcentaje basado en una función en la que se multiplica cada entrada por un factor dependiendo de su peso para obtener el resultado:
 
-| Edad | Presión | Colesterol | Frecuencia cardiaca | Depresión segmento ST | Riesgo (fuzzy) | Riesgo (matemático) |
+| Edad | Presión | Colesterol | Frecuencia cardíaca | Depresión segmento ST | Riesgo (fuzzy) | Riesgo (matemático) |
 | ---- | ------- | ---------- | ------------------- | --------------------- | -------------- | ------------------- |
 | 71   | 120     | 265        | 130                 | 0.24                  | 40             | 32                  |
 | 49   | 130     | 188        | 139                 | 2                     | 40             | 28                  |
@@ -193,7 +203,7 @@ Como el propio *dataset* con el que se ha construido el sistema difuso no ha sid
 
 ## Conclusiones
 
-El sistema ha sido probado por expertos en medicina y llega a simular a un médico pues coincide en un 94% con los resultados obtenidos por este. La principal ventaja es que teniendo los datos de entrada, no hace falta consultar a un experto y el propio usuario puede conocer el riesgo que tiene de sufrir un ataque cardiaco. También puede servir de soporte para un médico con poca experiencia para realizar sus primeros diagnósticos con éxito.
+El sistema ha sido probado por expertos en medicina y llega a simular a un médico pues coincide en un 94% con los resultados obtenidos por este. La principal ventaja es que teniendo los datos de entrada, no hace falta consultar a un experto y el propio usuario puede conocer el riesgo que tiene de sufrir un ataque cardíaco. También puede servir de soporte para un médico con poca experiencia para realizar sus primeros diagnósticos con éxito.
 
 Así como este sistema se ha creado específicamente para problemas de corazón, se podrían crear otros para cualquier otro tipo de enfermedad.
 
@@ -205,3 +215,4 @@ Y es que la aplicación de la lógica difusa en la medicina, como ya se comentó
 2. Tarhini, A., Kočiš, L'. (1998). Fuzzy Approach in Psychiatry. *Psychiatria*, 80-86.
 3. Sikchi, S. S., Sikchi, S., & Ali, M. S. (2013). Generic medical fuzzy expert system for diagnosis of cardiac diseases. *International Journal of Computer Applications, 66*(13).
 4. Adeli, A., & Neshat, M. (2010, March). A fuzzy expert system for heart disease diagnosis. In *Proceedings of International Multi Conference of Engineers and Computer Scientists, Hong Kong* (Vol. 1).
+5. Barman, M., Choudhuy, J. P. (2012). A Fuzzy Rule Base System for the Diagnosis of Heart Disease. *International Journal of Computer Applications, 57*(7).
