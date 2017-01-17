@@ -176,7 +176,7 @@ Para obtener un resultado en forma de porcentaje y no en forma de variable difus
 
 ### Ejemplos de salidas
 
-Como el propio *dataset* con el que se ha construido el sistema difuso no ha sido liberado, no puedo ver cuánto se asemeja a la realidad. Pero si se puede cambiar con un modelo matemático también usado para calcular este porcentaje basado en una función en la que se multiplica cada entrada por un factor dependiendo de su peso para obtener el resultado:
+Como el propio *dataset* con el que se ha construido el sistema difuso no ha sido liberado, no puedo ver cuánto se asemeja a la realidad. Pero si se puede comparar con un modelo matemático también usado para calcular este porcentaje basado en una función en la que se multiplica cada entrada por un factor dependiendo de su peso para obtener el resultado:
 
 | Edad | Presión | Colesterol | Frecuencia cardíaca | Depresión segmento ST | Riesgo (fuzzy) | Riesgo (matemático) |
 | ---- | ------- | ---------- | ------------------- | --------------------- | -------------- | ------------------- |
