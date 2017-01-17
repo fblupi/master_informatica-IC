@@ -10,9 +10,15 @@ import java.util.Set;
  */
 public class EA {
     /**
-     * Mutation probability after crossover
+     * Individual mutation probability after crossover
      */
-    private final double MUTATION_PROBABILITY = 0.3;
+    private final double INDIVIDUAL_MUTATION_PROBABILITY = 0.3;
+
+
+    /**
+     * Gene mutation probability after crossover
+     */
+    private final double GENE_MUTATION_PROBABILITY = 0.002;
 
     /**
      * Number of generations
@@ -175,14 +181,18 @@ public class EA {
         Random r = new Random();
         double prob = r.nextDouble();
         // Check if mutate
-        if (prob < MUTATION_PROBABILITY) {
-            // Positions to mutate
-            int pos1, pos2;
-            pos1 = r.nextInt(Matrices.getSize());
-            do {
-                pos2 = r.nextInt(Matrices.getSize());
-            } while (pos1 == pos2); // cannot mutate the same position
-            individual.mutate(pos1, pos2); // mutate
+        if (prob < INDIVIDUAL_MUTATION_PROBABILITY) {
+            for (int i = 0; i < Matrices.getSize(); i++) {
+                prob = r.nextDouble();
+                if (prob < GENE_MUTATION_PROBABILITY) {
+                    // Position to mutate with i
+                    int j;
+                    do {
+                        j = r.nextInt(Matrices.getSize());
+                    } while (j == i); // cannot mutate the same position
+                    individual.mutate(i, j); // mutate
+                }
+            }
         }
     }
 

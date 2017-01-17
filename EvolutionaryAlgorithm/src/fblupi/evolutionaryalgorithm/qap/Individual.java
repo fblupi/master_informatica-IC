@@ -153,10 +153,7 @@ public class Individual {
                     Individual T = new Individual(S);
                     T.getSolution()[i] = S.getSolution()[j];
                     T.getSolution()[j] = S.getSolution()[i];
-                    T.adjustFitness(i, j); // calculate fitness of new solution
-                    System.out.println("adj " + T.getFitness());
-                    T.calculateFitness();
-                    System.out.println("cal " + T.getFitness());
+                    T.adjustFitness(i, j, S.getSolution()); // calculate fitness of new solution
                     if (T.getFitness() < S.getFitness()) { // if new solution is better than older updates
                         S = new Individual(T);
                     }
@@ -171,16 +168,23 @@ public class Individual {
      * @param i first gene
      * @param j second gene
      */
-    private void adjustFitness(int i, int j) {
+    private void adjustFitness(int i, int j, int[] old) {
         for (int k = 0; k < Matrices.getSize(); k++) {
-            fitness -= Matrices.getFlowMatrix()[i][k] * Matrices.getDistanceMatrix()[solution[j]][solution[k]];
+            // Fil i
+            fitness -= Matrices.getFlowMatrix()[i][k] * Matrices.getDistanceMatrix()[old[i]][old[k]];
             fitness += Matrices.getFlowMatrix()[i][k] * Matrices.getDistanceMatrix()[solution[i]][solution[k]];
-            fitness -= Matrices.getFlowMatrix()[j][k] * Matrices.getDistanceMatrix()[solution[i]][solution[k]];
+
+            // Fil j
+            fitness -= Matrices.getFlowMatrix()[j][k] * Matrices.getDistanceMatrix()[old[j]][old[k]];
             fitness += Matrices.getFlowMatrix()[j][k] * Matrices.getDistanceMatrix()[solution[j]][solution[k]];
+
             if (k != i && k != j) {
-                fitness -= Matrices.getFlowMatrix()[k][i] * Matrices.getDistanceMatrix()[solution[k]][solution[j]];
+                // Col i
+                fitness -= Matrices.getFlowMatrix()[k][i] * Matrices.getDistanceMatrix()[old[k]][old[i]];
                 fitness += Matrices.getFlowMatrix()[k][i] * Matrices.getDistanceMatrix()[solution[k]][solution[i]];
-                fitness -= Matrices.getFlowMatrix()[k][j] * Matrices.getDistanceMatrix()[solution[k]][solution[i]];
+
+                // Col j
+                fitness -= Matrices.getFlowMatrix()[k][j] * Matrices.getDistanceMatrix()[old[k]][old[j]];
                 fitness += Matrices.getFlowMatrix()[k][j] * Matrices.getDistanceMatrix()[solution[k]][solution[j]];
             }
         }
