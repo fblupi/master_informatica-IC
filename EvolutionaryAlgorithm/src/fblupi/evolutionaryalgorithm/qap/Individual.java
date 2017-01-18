@@ -4,6 +4,7 @@ import java.util.Random;
 
 /**
  * Single individual in the evolutionary algorithm
+ * @author fblupi
  */
 public class Individual {
     /**
@@ -167,6 +168,7 @@ public class Individual {
      * Adjust fitness after changing two genes
      * @param i first gene
      * @param j second gene
+     * @param old old solution before changing genes
      */
     private void adjustFitness(int i, int j, int[] old) {
         for (int k = 0; k < Matrices.getSize(); k++) {

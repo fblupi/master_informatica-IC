@@ -2,6 +2,7 @@ package fblupi.evolutionaryalgorithm.qap;
 
 /**
  * Population in the evolutionary algorithm
+ * @author fblupi
  */
 public class Population {
     /**

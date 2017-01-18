@@ -6,11 +6,12 @@ import java.util.Arrays;
 
 /**
  * QAP Solver with Evolutionary Algorithms
+ * @author fblupi
  */
 public class Solver {
     public static void main(String[] args) throws FileNotFoundException {
-        boolean todoStandard = false;
-        boolean todoBaldwinian = false;
+        boolean todoStandard = true;
+        boolean todoBaldwinian = true;
         boolean todoLamarckian = true;
 
         long iniStandard, finStandard, iniBaldwinian, finBaldwinian, iniLamarckian, finLamarckian;

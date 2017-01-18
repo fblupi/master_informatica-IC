@@ -7,6 +7,7 @@ import java.util.Set;
 
 /**
  * Standard evolutionary algorithm
+ * @author fblupi
  */
 public class EA {
     /**
