@@ -15,7 +15,6 @@ public class EA {
      */
     private final double INDIVIDUAL_MUTATION_PROBABILITY = 0.3;
 
-
     /**
      * Gene mutation probability after crossover
      */
@@ -24,7 +23,7 @@ public class EA {
     /**
      * Number of generations
      */
-    private final int NUMBER_OF_GENERATIONS = 100;
+    private final int NUMBER_OF_GENERATIONS = 200;
 
     /**
      * Population size

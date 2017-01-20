@@ -10,8 +10,8 @@ import java.util.Arrays;
  */
 public class Solver {
     public static void main(String[] args) throws FileNotFoundException {
-        boolean todoStandard = true;
-        boolean todoBaldwinian = true;
+        boolean todoStandard = false;
+        boolean todoBaldwinian = false;
         boolean todoLamarckian = true;
 
         long iniStandard, finStandard, iniBaldwinian, finBaldwinian, iniLamarckian, finLamarckian;
