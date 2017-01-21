@@ -166,6 +166,7 @@ Para mejorar los resultados teníamos que aplicar una técnica de optimización 
 \\ \\
 La \textit{baldwiniana} consiste en optimizar cada uno de los individuos, pero sin usar estos individuos optimizados para generar la nueva población.
 
+\label{sec:opt-local}
 \subsubsection{Optimización local}
 
 La técnica de optimización local utilizada es una técnica \textit{2-opt}. En la que se va comprobando como un intercambio de genes en un individuo puede mejorar su coste asociado. El pseudo-código de esta para cada individuo es:
@@ -223,7 +224,20 @@ Se puede observar como la solución se queda estancada muy pronto en un óptimo 
 
 \subsection{Variante \textit{lamarckiana}}
 
-Lala
+Usando el mismo método que el descrito en la sección \ref{sec:opt-local} se ha creado la variante \textit{lamarckiana} que se diferencia de la \textit{baldwiniana} en que el individuo optimizado se utiliza para la generación de la nueva población.
+
+\subsubsection{Primeros resultados}
+
+Usando los mismos parámetros que los definidos en la sección \ref{sec:standard-parameters} se ha llegado a obtener un individuo con coste 44.812.496 (Figura \ref{fig:lamarckian-ea}) que mejoraba en aproximadamente 1.400.000 el resultado obtenido con el algoritmo genético estándar y en 35.000 al obtenido con la variante \textit{baldwiniana}.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=14cm]{img/lamarckian-ea}
+	\caption{Resultados obtenidos con la variante \textit{lamarckiana} durante 100 generaciones}
+	\label{fig:lamarckian-ea}
+\end{figure}
+
+Con esta variante se estanca en un óptimo local más tarde que con la anterior.
 
 \section{Resultados}
 
