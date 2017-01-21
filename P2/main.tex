@@ -151,7 +151,7 @@ Una vez definidos todos los algoritmos hay que ajustar los distintos parámetros
 	\item \textbf{Probabilidad de mutación del gen}: Una vez se comprueba si un individuo muta se vuelve a comprobar por cada gen si este muta por otro. La probabilidad no debe ser muy alta pues podría dar lugar a un individuo totalmente distinto al original por lo que se ha usado una probabilidad de 0,002.
 \end{itemize}
 
-Con estos valores se ha ejecutado una vez el algoritmo obteniendo tras las 100 generaciones un individuo con un coste de 46.252.424 (Figura \ref{fig:standard-ea}). Todavía lejos de la mejor solución obtenida hasta ahora con, más o menos, 1.500.000 de diferencia.
+Con estos valores se ha ejecutado una vez el algoritmo sobre el conjunto de datos de prueba \texttt{tai256c} obteniendo tras las 100 generaciones un individuo con un coste de 46.252.424 (Figura \ref{fig:standard-ea}). Todavía lejos de la mejor solución obtenida hasta ahora con, más o menos, 1.500.000 de diferencia.
 
 \begin{figure}[H]
 	\centering
@@ -211,7 +211,7 @@ for (k = 0 -> Problem.size) {
 
 \subsubsection{Primeros resultados}
 
-Usando los mismos parámetros que los definidos en la sección \ref{sec:standard-parameters} se ha llegado a obtener un individuo con coste 44.847.954 (Figura \ref{fig:baldwinian-ea}) que mejoraba en aproximadamente 1.400.000 el resultado obtenido con el algoritmo genético estándar. 
+Usando los mismos parámetros que los definidos en la sección \ref{sec:standard-parameters} se ha llegado a obtener un individuo con coste 44.847.954 (Figura \ref{fig:baldwinian-ea}) que mejoraba en aproximadamente 1.400.000 el resultado obtenido con el algoritmo genético estándar para el conjunto de datos de prueba \texttt{tai256c}. 
 
 \begin{figure}[H]
 	\centering
@@ -228,7 +228,7 @@ Usando el mismo método que el descrito en la sección \ref{sec:opt-local} se ha
 
 \subsubsection{Primeros resultados}
 
-Usando los mismos parámetros que los definidos en la sección \ref{sec:standard-parameters} se ha llegado a obtener un individuo con coste 44.812.496 (Figura \ref{fig:lamarckian-ea}) que mejoraba en aproximadamente 1.400.000 el resultado obtenido con el algoritmo genético estándar y en 35.000 al obtenido con la variante \textit{baldwiniana}.
+Usando los mismos parámetros que los definidos en la sección \ref{sec:standard-parameters} se ha llegado a obtener un individuo con coste 44.812.496 (Figura \ref{fig:lamarckian-ea}) que mejoraba en aproximadamente 1.400.000 el resultado obtenido con el algoritmo genético estándar y en 35.000 al obtenido con la variante \textit{baldwiniana} en el conjunto de datos de prueba \texttt{tai256c}.
 
 \begin{figure}[H]
 	\centering
@@ -240,6 +240,35 @@ Usando los mismos parámetros que los definidos en la sección \ref{sec:standard
 Con esta variante se estanca en un óptimo local más tarde que con la anterior.
 
 \section{Resultados}
+
+\subsection{Comparación de métodos}
+
+Una vez implementados todos los métodos es el momento de intentar encontrar la mejor solución posible en el conjunto de datos \texttt{tai256c}, para ello, lo primero que hay que decidir es en qué método centrarse.
+\\
+\\
+Se puede observar con claridad que el algoritmo genético estándar, pese a ser muy rápido debe ser descartado (Figura \ref{fig:comparing-standard-with-opt}) pues depende mucho de la población inicial y debemos intentar depender lo menos posible del azar.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=14cm]{img/comparing-standard-with-opt}
+	\caption{Resultados obtenidos con todas las variantes implementadas tras 100 generaciones}
+	\label{fig:comparing-standard-with-opt}
+\end{figure}
+
+La diferencia de los algoritmos con optimización local a la escala de su comparación con el genético estándar es muy chica, por lo que realizamos un \textit{zoom} para compararlos (Figura \ref{fig:comparing-opt}).
+\\ \\
+La diferencia es considerable y podemos observar como la variante \textit{lamarckiana} funciona bastante mejor que la variante \textit{baldwiniana}.
+\\ \\
+Por esta razón nos dedicaremos a optimizar los parámetros para mejorar el resultado obtenido con esta variante para acercarnos lo máximo posible a la solución más óptima descubierta hasta ahora (44.759.294).
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=14cm]{img/comparing-opt}
+	\caption{Resultados obtenidos con las variantes con optimización local tras 100 generaciones}
+	\label{fig:comparing-opt}
+\end{figure}
+
+\subsection{Ajuste de parámetros}
 
 Lala
 
