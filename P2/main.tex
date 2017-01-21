@@ -1,5 +1,6 @@
 \input{estilo.tex}
 \usepackage{textcomp}
+\usepackage{listings}
 
 %----------------------------------------------------------------------------------------
 %	DATOS
@@ -60,18 +61,22 @@
 
 \section{Introducción}
 
-Durante esta práctica se han implementado tres variantes de un algoritmo evolutivo (algoritmo genético estándar, variante balwiniana y lamarckiana) para resolver el problema NP de la asignación cuadrática o QAP (Quadratic Assignment Problem).
+Durante esta práctica se han implementado tres variantes de un algoritmo evolutivo (algoritmo genético estándar, variante \textit{balwiniana} y \textit{lamarckiana}) para resolver el problema NP de la asignación cuadrática o QAP (\textit{Quadratic Assignment Problem}).
 \\ \\
 El problema consiste en designar una serie de localizaciones a instalaciones, dadas las distancias y flujo de materiales entre cada una de ellas, para minimizar el coste de transporte de materiales entre instalaciones.
 \\ \\
 La función de coste es:
+
 \[ \sum_{i,j} w(i,j) \times d(p(i),p(j)) \]
+
 Siendo:
+
 \begin{itemize}
-	\item $ w(i,j) $ el peso asociado al flujo de materiales transportados desde la instalación i a la instalación j
-	\item $ d(i,j) $ la distancia de la localización i a la j
-	\item $ p(i) $ la instalación i en una posible solución del problema
+	\item $ w(i,j) $ el peso asociado al flujo de materiales transportados desde la instalación \textit{i} a la instalación \textit{j}
+	\item $ d(i,j) $ la distancia de la localización \textit{i} a la \textit{j}
+	\item $ p(i) $ la instalación \textit{i} en una posible solución del problema
 \end{itemize}
+
 Los casos de prueba han sido obtenidos de la biblioteca QAPLIB \footnote{\url{http://www.seas.upenn.edu/qaplib/}}. Los ficheros tienen el siguiente formato:
 \\ \\
 \texttt{n}
@@ -82,7 +87,7 @@ Los casos de prueba han sido obtenidos de la biblioteca QAPLIB \footnote{\url{ht
 \\ \\
 Donde \textit{n} es el tamaño del problema, \textit{D} es la matriz de tamaño $ n \times n $ de distancias y \textit{W} es la matriz de tamaño $ n \times n $ de flujos de material.
 \\ \\
-El objetivo de la práctica es intentar obtener el mejor resultado posible sobre el conjunto de datos de prueba \texttt{tai256c}. Actualmente la mejor solución obtenida con un algoritmo evolutivo para este problema es la de una permutación con un coste de 44759294.
+El objetivo de la práctica es intentar obtener el mejor resultado posible sobre el conjunto de datos de prueba \texttt{tai256c}. Actualmente la mejor solución obtenida con un algoritmo evolutivo para este problema es la de una permutación con un coste de 44.759.294.
 
 \section{Implementación}
 
@@ -92,6 +97,7 @@ En esta sección se tratarán los temas de implementación de las distintas vari
 
 En primer lugar se realizó un algoritmo genético estándar sin optimización local. Para ello había que tomar varias decisiones en los distintos operadores y mecanismos.
 
+\label{sec:op-seleccion}
 \subsubsection{Mecanismo de selección}
 
 Para definir quiénes van a ser los padres de la nueva generación de individuos se ha optado por un método híbrido entre elección por ruleta y por torneo. 
@@ -112,11 +118,13 @@ Una vez se han creado los \textit{N} nuevos individuos estos reemplazan a todos 
 Se ha hecho uso del operador de cruce ordenado u OX \textit{(Order Crossover}) usando dos puntos aleatorios ya que era sencillo tanto de entender como de implementar.
 \\ \\
 Este tiene los siguientes pasos (Figura \ref{fig:ox-crossover}):
+
 \begin{itemize}
 	\item Paso 0: Definir aleatoriamente los índices \textit{i} y \textit{j}.
 	\item Paso 1: Copiar entre los índices \textit{i} y \textit{j} del primer hijo los genes que hay entre los índices \textit{i} y \textit{\textit{j}} del primer padre. Hacer lo mismo con el segundo hijo y el segundo padre.
 	\item Paso 2: Copiar ordenadamente los genes del segundo padre en el primer hijo en los huecos libres de forma que no se repitan con los que ya ha copiado en el primer paso. Hacer lo mismo con el segundo hijo y el primer padre.
 \end{itemize}
+
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=14cm]{img/ox-crossover}
@@ -126,15 +134,92 @@ Este tiene los siguientes pasos (Figura \ref{fig:ox-crossover}):
 
 \subsubsection{Operador de mutación}
 
-Lala
+Para mutar se definen dos valores con la probabilidad de que mute un hijo y otro con la que mute un gen.
+\\ \\
+Si un hijo muta, se recorren todos sus genes comprobando si mutan o no. Si mutan cambiarlo por otro gen aleatoriamente.
+
+\label{sec:standard-parameters}
+\subsubsection{Ajustando parámetros y primeros resultados}
+
+Una vez definidos todos los algoritmos hay que ajustar los distintos parámetros:
+
+\begin{itemize}
+	\item \textbf{Número de generaciones}: Para comenzar a probar el algoritmo usé 50 generaciones, pero vi que todavía seguía mejorando sin estancarse en un óptimo local por lo que aumenté el número de generaciones a 100.
+	\item \textbf{Tamaño de población}: Una población más grande implica explorar un área más grande, pero conforme avanzan las generaciones cada vez los individuos son más parecidos por lo que tener una población excesivamente grande solo va a ralentizar la ejecución.
+	\item \textbf{Número de individuos en el torneo}: Para intentar no tener individuos muy parecidos en la población se ha decidido por un tamaño de individuos en torneo bajo en comparación con los individuos totales de una población y de esta forma dar más valor al azar. El torneo, por tanto tiene un tamaño de 5 individuos de los que, como se explicó en la sección \ref{sec:op-seleccion}, se elegirá al mejor.
+	\item \textbf{Probabilidad de mutación del individuo}: Mutar puede ayudar a dar más variedad a la población, incluso a escapar de óptimos locales. Pero mutar siempre puede provocar que no se explore a fondo un espacio donde podría haber una buena solución. Se ha usado una probabilidad de mutación de individuo de 0,3.
+	\item \textbf{Probabilidad de mutación del gen}: Una vez se comprueba si un individuo muta se vuelve a comprobar por cada gen si este muta por otro. La probabilidad no debe ser muy alta pues podría dar lugar a un individuo totalmente distinto al original por lo que se ha usado una probabilidad de 0,002.
+\end{itemize}
+
+Con estos valores se ha ejecutado una vez el algoritmo obteniendo tras las 100 generaciones un individuo con un coste de 46.252.424 (Figura \ref{fig:standard-ea}). Todavía lejos de la mejor solución obtenida hasta ahora con, más o menos, 1.500.000 de diferencia.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=14cm]{img/standard-ea}
+	\caption{Resultados obtenidos con el algoritmo genético estándar durante 100 generaciones}
+	\label{fig:standard-ea}
+\end{figure}
 
 \subsection{Variante \textit{baldwiniana}}
 
-Lala
+Para mejorar los resultados teníamos que aplicar una técnica de optimización local para explotar un espacio de exploración. Para ello se han utilizado dos técnicas: la \textit{baldwiniana} y la \textit{lamarckiana}.
+\\ \\
+La \textit{baldwiniana} consiste en optimizar cada uno de los individuos, pero sin usar estos individuos optimizados para generar la nueva población.
 
 \subsubsection{Optimización local}
 
-Lala
+La técnica de optimización local utilizada es una técnica \textit{2-opt}. En la que se va comprobando como un intercambio de genes en un individuo puede mejorar su coste asociado. El pseudo-código de esta para cada individuo es:
+
+\begin{lstlisting}
+do {
+	best = S
+	for (i = 0 -> solution.length) {
+		for (j = i + 1 -> solution.length) {
+			T = S
+			T[i] = S[j]
+			T[j] = S[i]
+			T.adjustFitness()
+			if (T.fitness < S.fitness) {
+				S = T
+			}
+		}
+	}
+} while (S.fitness < best.fitness)
+\end{lstlisting}
+
+La función \texttt{adjustFitness} es la que calcula el nuevo coste de la solución con la permutación realizada. En un principio usé la misma función de calcular el coste del individuo completo pero ralentizaba tanto el tiempo de cómputo que tuve que buscar una alternativa.
+\\ \\
+Como al permutar \textit{i} y \textit{j} solo se ven afectadas dos filas y dos columnas de la matriz (el 0.78\% del total de las celdas), calcular el coste del individuo completo era una tontería.
+\\ \\
+Se cambió esta función para que restase el coste de la solución antigua y se sumen las de la nueva. En pseudo-código:
+
+\begin{lstlisting}
+for (k = 0 -> Problem.size) {
+	fitness -= w[i][k] * d(oldSol[i][k])
+	fitness += w[i][k] * d(newSol[i][k])
+	fitness -= w[j][k] * d(oldSol[j][k])
+	fitness += w[j][k] * d(newSol[j][k])
+	if (k != i && k != j) {
+		fitness -= w[k][i] * d(oldSol[k][i])
+		fitness += w[k][i] * d(newSol[k][i])
+		fitness -= w[k][j] * d(oldSol[k][j])
+		fitness += w[k][j] * d(newSol[k][j])
+	}
+}
+\end{lstlisting}
+
+\subsubsection{Primeros resultados}
+
+Usando los mismos parámetros que los definidos en la sección \ref{sec:standard-parameters} se ha llegado a obtener un individuo con coste 44.847.954 (Figura \ref{fig:baldwinian-ea}) que mejoraba en aproximadamente 1.400.000 el resultado obtenido con el algoritmo genético estándar. 
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=14cm]{img/baldwinian-ea}
+	\caption{Resultados obtenidos con la variante \textit{baldwiniana} durante 100 generaciones}
+	\label{fig:baldwinian-ea}
+\end{figure}
+
+Se puede observar como la solución se queda estancada muy pronto en un óptimo local llegando a alcanzarlo antes de la generación 50.
 
 \subsection{Variante \textit{lamarckiana}}
 
