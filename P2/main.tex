@@ -241,6 +241,7 @@ Con esta variante se estanca en un óptimo local más tarde que con la anterior.
 
 \section{Resultados}
 
+\label{sec:comparacion-metodos}
 \subsection{Comparación de métodos}
 
 Una vez implementados todos los métodos es el momento de intentar encontrar la mejor solución posible en el conjunto de datos \texttt{tai256c}, para ello, lo primero que hay que decidir es en qué método centrarse.
@@ -270,7 +271,25 @@ Por esta razón nos dedicaremos a optimizar los parámetros para mejorar el resu
 
 \subsection{Ajuste de parámetros}
 
-Lala
+En la gráfica presentada en la sección \ref{sec:comparacion-metodos} se puede observar como la variante \textit{lamarckiana} no llega a estancarse del todo tras 100 generaciones, por lo que se aumentaron el número de generaciones a 200 con el objetivo de comprobar si era una impresión acertada. Pero tras varias ejecuciones se vio que no solía mejorarse tras las 100 generaciones. Solo en 1 de 5 ejecuciones, por lo que se mantuvo el número de generaciones.
+\\ \\
+Para intentar conseguir una mayor variedad de individuos se cambió la probabilidad de mutación aumentando de 0,3 a 0,8 la probabilidad de que mute un individuo y de 0,002 a 0,01 la de un gen. Los resultados obtenidos tampoco diferían demasiado por lo que se probó con valores intermedios entre ambos ya que me parecían muy bajas las probabilidades iniciales dejando finalmente la probabilidad de que un individuo mute a 0,5 y de un gen a 0,005 y se ejecutó varias ocasiones obteniendo unos resultados ligeramente mejores que los que se obtuvieron previamente.
+
+\subsection{Resultado final}
+
+El mejor resultado finalmente se obtuvo con los siguientes parámetros:
+
+\begin{itemize}
+	\item Tamaño de población: 100
+	\item Número de generaciones: 100 (obtenidos mejor resultado en la 85)
+	\item Número de individuos en el torneo: 5
+	\item Probabilidad de mutación de individuo: 0,3
+	\item Probabilidad de mutación de gen: 0,5
+\end{itemize}
+
+El resultado fue 44.790.360 a tan solo 31.066 del mejor resultado obtenido hasta ahora con un algoritmo genético.
+\\ \\
+La ejecución del algoritmo hasta que encontró este resultado duró 38 minutos y 39 segundos.
 
 \section{Conclusiones}
 

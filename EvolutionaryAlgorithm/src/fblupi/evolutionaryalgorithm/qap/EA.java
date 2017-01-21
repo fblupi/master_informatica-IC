@@ -13,12 +13,12 @@ public class EA {
     /**
      * Individual mutation probability after crossover
      */
-    private final double INDIVIDUAL_MUTATION_PROBABILITY = 0.3;
+    private final double INDIVIDUAL_MUTATION_PROBABILITY = 0.5;
 
     /**
      * Gene mutation probability after crossover
      */
-    private final double GENE_MUTATION_PROBABILITY = 0.002;
+    private final double GENE_MUTATION_PROBABILITY = 0.005;
 
     /**
      * Number of generations
@@ -33,7 +33,7 @@ public class EA {
     /**
      * Number of tournament participants
      */
-    private final int TOURNAMENT_SIZE = 5;
+    private final int TOURNAMENT_SIZE = 8;
 
     /**
      * Type of the evolutionary algorithm
