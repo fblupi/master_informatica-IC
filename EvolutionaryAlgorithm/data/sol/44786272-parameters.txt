@@ -4,5 +4,5 @@ Individual mutation probability: 0.5
 Gene mutation probability: 0.005
 Tournament size: 5
 Generation: 100
-Fitness: 44789608
+Fitness: 44786272
 Time: 2674
