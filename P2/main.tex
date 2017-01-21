@@ -290,10 +290,20 @@ El mejor resultado finalmente se obtuvo con los siguientes parámetros:
 El resultado fue 44.790.360 a tan solo 31.066 del mejor resultado obtenido hasta ahora con un algoritmo genético.
 \\ \\
 La ejecución del algoritmo hasta que encontró este resultado duró 38 minutos y 39 segundos.
+\\ \\
+La permutación que da lugar a este resultado ha sido: 
+\\ \\
+13 217 22 239 232 169 4 244 183 5 194 146 40 171 30 140 175 180 221 25 135 27 190 11 95 109 207 17 227 166 188 24 163 48 141 245 38 184 107 168 82 204 68 178 57 138 52 205 76 149 59 134 174 53 99 29 94 81 252 197 129 0 201 152 219 62 181 47 208 100 87 186 234 115 23 137 39 121 196 65 126 161 6 213 116 84 170 151 80 176 136 7 200 249 42 246 231 10 139 125 14 132 203 54 167 33 113 145 162 51 108 35 31 123 211 28 112 177 56 131 19 191 3 92 50 185 182 223 130 120 34 155 122 91 101 154 250 143 98 90 243 86 218 16 148 61 214 77 210 153 66 160 8 193 67 189 230 110 79 225 72 93 114 229 2 240 111 36 144 49 224 45 216 44 150 198 209 43 251 74 199 58 202 206 15 119 133 235 41 164 237 9 173 102 1 212 165 248 75 195 156 83 172 64 105 127 85 157 236 20 124 32 96 89 106 228 26 238 69 242 215 18 97 73 55 118 159 103 60 192 241 78 226 220 233 88 142 104 71 179 147 37 253 70 117 46 222 187 63 255 12 254 158 21 128 247
 
 \section{Conclusiones}
 
-Lala
+Se ha realizado una implementación tanto de un algoritmo genético estándar como de las variantes \textit{baldwiniana} y \textit{lamarckiana} para resolver el problema QAP, en especial, el conjunto de datos \texttt{tai256c}.
+\\ \\
+Tras su implementación se ha realizado una comparación entre los métodos y se ha visto como las variantes con optimización local mejoran bastante al algoritmo genérico estándar porque, aunque se centren en buscar el mínimo en un espacio más reducido, llegan a optimizar mucho este espacio obteniendo un resultado mucho más bueno.
+\\ \\
+Una vez decidido el uso de la variante \textit{lamarckiana}, que es la que parecía dar mejores resultados, se vio cómo el ajustar los parámetros no mejora ostensiblemente el resultado. Haría falta cambiar los operadores o el método de optimización para que la mejora fuese mayor.
+\\ \\
+No obstante, el resultado final de una permutación con coste 44.790.360 ha sido bastante bueno teniendo en cuenta que la mejor solución obtenida hasta ahora con otro algoritmo genético tenía un coste tan solo 31.066 menor que el obtenido.
 
 
 %----------------------------------------------------------------------------------------
