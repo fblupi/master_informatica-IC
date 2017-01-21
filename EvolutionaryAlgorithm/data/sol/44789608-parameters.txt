@@ -1,0 +1,8 @@
+Type: Lamarckian
+Population: 100
+Individual mutation probability: 0.5
+Gene mutation probability: 0.005
+Tournament size: 5
+Generation: 92
+Fitness: 44789608
+Time: 2510
