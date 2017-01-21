@@ -1,6 +1,9 @@
 package fblupi.evolutionaryalgorithm.qap;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.Random;
+import java.util.Scanner;
 
 /**
  * Single individual in the evolutionary algorithm
@@ -40,6 +43,20 @@ public class Individual {
         solution = new int[other.getSolution().length];
         System.arraycopy(other.getSolution(), 0, solution, 0, other.getSolution().length);
         fitness = other.getFitness();
+    }
+
+    /**
+     * Create an individual from a file with the solution
+     * @param file file with a serie of integers with the solution
+     * @throws FileNotFoundException
+     */
+    public Individual(File file) throws FileNotFoundException {
+        Scanner scanner = new Scanner(file);
+        solution = new int[Matrices.getSize()];
+        for (int i = 0; i < Matrices.getSize(); i++) {
+            solution[i] = scanner.nextInt();
+        }
+        calculateFitness();
     }
 
     /**

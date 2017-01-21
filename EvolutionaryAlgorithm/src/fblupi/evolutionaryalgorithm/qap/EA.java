@@ -83,7 +83,7 @@ public class EA {
             generation.getPopulation()[0] = new Individual(population.getFittest()); // preserve best individual
             generation.calculateImprovedFitness(type); // calculate improved fitness of new generation
             population = generation; // Evolve into the new generation
-            System.out.println("Generation " + (i + 1));
+            System.out.println("Generation: " + (i + 1));
             System.out.println("\tSolution: " + Arrays.toString(population.getFittest().getSolution()));
             System.out.println("\tFitness: " + population.getFittest().getFitness());
         }
