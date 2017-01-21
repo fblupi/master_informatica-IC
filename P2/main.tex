@@ -109,7 +109,20 @@ Una vez se han creado los \textit{N} nuevos individuos estos reemplazan a todos 
 \label{sec:op-cruce}
 \subsubsection{Operador de cruce}
 
-Lala
+Se ha hecho uso del operador de cruce ordenado u OX \textit{(Order Crossover}) usando dos puntos aleatorios ya que era sencillo tanto de entender como de implementar.
+\\ \\
+Este tiene los siguientes pasos (Figura \ref{fig:ox-crossover}):
+\begin{itemize}
+	\item Paso 0: Definir aleatoriamente los índices \textit{i} y \textit{j}.
+	\item Paso 1: Copiar entre los índices \textit{i} y \textit{j} del primer hijo los genes que hay entre los índices \textit{i} y \textit{\textit{j}} del primer padre. Hacer lo mismo con el segundo hijo y el segundo padre.
+	\item Paso 2: Copiar ordenadamente los genes del segundo padre en el primer hijo en los huecos libres de forma que no se repitan con los que ya ha copiado en el primer paso. Hacer lo mismo con el segundo hijo y el primer padre.
+\end{itemize}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=14cm]{img/ox-crossover}
+	\caption{Pasos cruce OX}
+	\label{fig:ox-crossover}
+\end{figure}
 
 \subsubsection{Operador de mutación}
 
