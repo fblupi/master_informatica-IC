@@ -1,0 +1,141 @@
+\input{estilo.tex}
+\usepackage{textcomp}
+
+%----------------------------------------------------------------------------------------
+%	DATOS
+%----------------------------------------------------------------------------------------
+
+\newcommand{\myName}{Francisco Javier Bolívar Lupiáñez}
+\newcommand{\myDegree}{Máster en Ingeniería Informática}
+\newcommand{\myFaculty}{E. T. S. de Ingenierías Informática y de Telecomunicación}
+\newcommand{\myDepartment}{Ciencias de la Computación e Inteligencia Artificial}
+\newcommand{\myUniversity}{\protect{Universidad de Granada}}
+\newcommand{\myLocation}{Granada}
+\newcommand{\myTime}{\today}
+\newcommand{\myTitle}{Práctica 2}
+\newcommand{\mySubtitle}{Algoritmos evolutivos. Resolución del problema NP QAP}
+\newcommand{\mySubject}{Inteligencia Computacional}
+\newcommand{\myYear}{2016-2017}
+
+%----------------------------------------------------------------------------------------
+%	PORTADA
+%----------------------------------------------------------------------------------------
+
+
+\title{	
+	\normalfont \normalsize 
+	\textsc{\textbf{\mySubject \space (\myYear)} \\ \myDepartment} \\[20pt] % Your university, school and/or department name(s)
+	\textsc{\myDegree \\[10pt] \myFaculty \\ \myUniversity} \\[25pt]
+	\horrule{0.5pt} \\[0.4cm] % Thin top horizontal rule
+	\huge \myTitle: \mySubtitle \\ % The assignment title
+	\horrule{2pt} \\[0.5cm] % Thick bottom horizontal rule
+	\normalfont \normalsize
+}
+
+\author{\myName} % Nombre y apellidos
+
+\date{\myTime} % Incluye la fecha actual
+%----------------------------------------------------------------------------------------
+%	INDICE
+%----------------------------------------------------------------------------------------
+
+\begin{document}
+	
+\setcounter{page}{0}
+
+\maketitle % Muestra el Título
+\thispagestyle{empty}
+
+\newpage %inserta un salto de página
+
+\tableofcontents % para generar el índice de contenidos
+
+%\listoffigures
+
+\newpage
+
+%----------------------------------------------------------------------------------------
+%	DOCUMENTO
+%----------------------------------------------------------------------------------------
+
+\section{Introducción}
+
+Durante esta práctica se han implementado tres variantes de un algoritmo evolutivo (algoritmo genético estándar, variante balwiniana y lamarckiana) para resolver el problema NP de la asignación cuadrática o QAP (Quadratic Assignment Problem).
+\\ \\
+El problema consiste en designar una serie de localizaciones a instalaciones, dadas las distancias y flujo de materiales entre cada una de ellas, para minimizar el coste de transporte de materiales entre instalaciones.
+\\ \\
+La función de coste es:
+\[ \sum_{i,j} w(i,j) \times d(p(i),p(j)) \]
+Siendo:
+\begin{itemize}
+	\item $ w(i,j) $ el peso asociado al flujo de materiales transportados desde la instalación i a la instalación j
+	\item $ d(i,j) $ la distancia de la localización i a la j
+	\item $ p(i) $ la instalación i en una posible solución del problema
+\end{itemize}
+Los casos de prueba han sido obtenidos de la biblioteca QAPLIB \footnote{\url{http://www.seas.upenn.edu/qaplib/}}. Los ficheros tienen el siguiente formato:
+\\ \\
+\texttt{n}
+\\
+\texttt{D}
+\\
+\texttt{W}
+\\ \\
+Donde \textit{n} es el tamaño del problema, \textit{D} es la matriz de tamaño $ n \times n $ de distancias y \textit{W} es la matriz de tamaño $ n \times n $ de flujos de material.
+\\ \\
+El objetivo de la práctica es intentar obtener el mejor resultado posible sobre el conjunto de datos de prueba \texttt{tai256c}. Actualmente la mejor solución obtenida con un algoritmo evolutivo para este problema es la de una permutación con un coste de 44759294.
+
+\section{Implementación}
+
+En esta sección se tratarán los temas de implementación de las distintas variantes.
+
+\subsection{Algoritmo genético estándar}
+
+En primer lugar se realizó un algoritmo genético estándar sin optimización local. Para ello había que tomar varias decisiones en los distintos operadores.
+
+\subsubsection{Mecanismo de selección}
+
+Lala
+
+\subsubsection{Mecanismo de reemplazo}
+
+Lala
+
+\subsubsection{Operador de cruce}
+
+Lala
+
+\subsubsection{Operador de mutación}
+
+Lala
+
+\subsection{Variante \textit{baldwiniana}}
+
+Lala
+
+\subsubsection{Optimización local}
+
+Lala
+
+\subsection{Variante \textit{lamarckiana}}
+
+Lala
+
+\section{Resultados}
+
+Lala
+
+\section{Conclusiones}
+
+Lala
+
+
+%----------------------------------------------------------------------------------------
+%	REFERENCIAS
+%----------------------------------------------------------------------------------------
+
+\newpage
+
+\bibliography{referencias} %archivo referencias.bib que contiene las entradas 
+\bibliographystyle{plain} % hay varias formas de citar
+
+\end{document}
