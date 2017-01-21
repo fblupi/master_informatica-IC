@@ -23,7 +23,7 @@ public class EA {
     /**
      * Number of generations
      */
-    private final int NUMBER_OF_GENERATIONS = 200;
+    private final int NUMBER_OF_GENERATIONS = 100;
 
     /**
      * Population size
