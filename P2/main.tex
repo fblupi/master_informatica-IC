@@ -90,16 +90,23 @@ En esta sección se tratarán los temas de implementación de las distintas vari
 
 \subsection{Algoritmo genético estándar}
 
-En primer lugar se realizó un algoritmo genético estándar sin optimización local. Para ello había que tomar varias decisiones en los distintos operadores.
+En primer lugar se realizó un algoritmo genético estándar sin optimización local. Para ello había que tomar varias decisiones en los distintos operadores y mecanismos.
 
 \subsubsection{Mecanismo de selección}
 
-Lala
+Para definir quiénes van a ser los padres de la nueva generación de individuos se ha optado por un método híbrido entre elección por ruleta y por torneo. 
+\\ \\
+Por ruleta se escogen \textit{M} posibles padres de los \textit{N} que forman la población, siendo $ M < N $. Y de entre todos esos elegidos al azar nos quedamos con el que mejor coste tenga para que sea el primer padre. Para generar el segundo, se vuelve a repetir este proceso con cuidado de evitar que se repita el mismo padre.
+\\ \\
+Con estos dos padres se crean dos nuevos individuos usando el operador de cruce que se explicará posteriormente en la sección \ref{sec:op-cruce}.
+\\ \\
+El proceso se repite $ N / 2 $ veces para crear \textit{N} nuevos individuos.
 
 \subsubsection{Mecanismo de reemplazo}
 
-Lala
+Una vez se han creado los \textit{N} nuevos individuos estos reemplazan a todos sus predecesores a excepción del primero cuya plaza será ocupada por el mejor de los predecesores. De esta forma nos aseguramos que cada generación tendrá un mejor individuo con un coste, al menos, igual que el de la anterior.
 
+\label{sec:op-cruce}
 \subsubsection{Operador de cruce}
 
 Lala
