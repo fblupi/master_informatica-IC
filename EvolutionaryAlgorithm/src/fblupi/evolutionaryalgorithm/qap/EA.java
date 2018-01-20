@@ -103,6 +103,7 @@ public class EA {
                 participant = r.nextInt(POPULATION_SIZE);
             } while (participants.contains(participant));
             tournament.getPopulation()[i] = new Individual(population.getPopulation()[participant]);
+            tournaments.add(participant);
         }
         return tournament.getFittest();
     }
